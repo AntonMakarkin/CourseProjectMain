@@ -218,7 +218,8 @@
                         Click="Clear_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="150,300,0,0" HorizontalAlignment="Center">
-                <Button Width="100" Content="Добавить" Margin="0,25,0,25"/>
+                <Button Width="100" Content="Добавить" Margin="0,25,0,25"
+                        Click="AddOrder_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

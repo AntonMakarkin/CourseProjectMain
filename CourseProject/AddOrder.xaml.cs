@@ -1,20 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SQLite;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Data.SqlClient;
-using System.Data.SQLite;
-using System.Data;
-using System.Configuration;
 
 namespace CourseProject
 {
@@ -29,7 +17,7 @@ namespace CourseProject
             Add_Order();
         }
 
-       
+
 
         void Add_Order()
         {
@@ -159,7 +147,8 @@ namespace CourseProject
                 TypeOfDevice.IsEnabled = true;
                 Model.IsEnabled = false;
             }*/
-            /*if (TypeOfDevice.SelectedValue.ToString() != null)
+
+            if (TypeOfDevice.SelectedValue.ToString() != null)
             {
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
                 SQLiteConnection conn = new SQLiteConnection(dbcon);
@@ -179,12 +168,28 @@ namespace CourseProject
                 //Brand.IsEnabled = false;
                 Model.IsEnabled = true;
                 Work.IsEnabled = false;
-            }*/
+                Brand.IsEnabled = false;
+
+            }
         }
 
         private void Model_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            string dbcon = @"Data Source = AddOrder.db; Version=3;";
+            SQLiteConnection conn = new SQLiteConnection(dbcon);
+            string work_search = "SELECT * FROM Works WHERE DeviceID = @DeviceID";
+            SQLiteCommand work_search_command = new SQLiteCommand(work_search, conn);
+            conn.Open();
+
+            work_search_command.Parameters.AddWithValue("@DeviceID", Model.SelectedValue.ToString());
+            SQLiteDataAdapter WorkDA = new SQLiteDataAdapter(work_search_command);
+            DataTable WorkDT = new DataTable();
+            WorkDA.Fill(WorkDT);
+            Work.SelectedValuePath = "id";
+            Work.DisplayMemberPath = "Name";
+            Work.ItemsSource = WorkDT.DefaultView;
+            Work.IsEnabled = true;
+            TypeOfDevice.IsEnabled = false;
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -193,9 +198,18 @@ namespace CourseProject
             Model.IsEnabled = false;
             TypeOfDevice.Text = "";
             Model.Text = "";*/
-            Hide();
+            /*Hide();
             AddOrder add = new AddOrder();
-            add.ShowDialog();
+            add.ShowDialog();*/
+            Brand.IsEnabled = false;
+        }
+
+        private void AddOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if ((ClientComboBox.SelectedIndex > -1) && (Brand.SelectedIndex > -1) && (TypeOfDevice.SelectedIndex > -1) && (Model.SelectedIndex > -1) && (Master.SelectedIndex > -1) && (Work.SelectedIndex > -1))
+            {
+                System.Windows.Forms.MessageBox.Show("Все введенно");
+            }
         }
     }
 }
