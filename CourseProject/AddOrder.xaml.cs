@@ -205,13 +205,6 @@ namespace CourseProject
 
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            /*TypeOfDevice.IsEnabled = false;
-            Model.IsEnabled = false;
-            TypeOfDevice.Text = "";
-            Model.Text = "";*/
-            /*Hide();
-            AddOrder add = new AddOrder();
-            add.ShowDialog();*/
             Brand.IsEnabled = false;
         }
 
