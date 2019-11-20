@@ -22,7 +22,7 @@ namespace CourseProject
         void Add_Order()
         {
             //Добавляем имена клиентов в combobox
-            string dbcon = @"Data Source = AddOrder.db; Version=3;";
+            /*string dbcon = @"Data Source = AddOrder.db; Version=3;";
             string query = "SELECT Name,Phone FROM Clients ORDER BY Name ASC;";
             SQLiteConnection conn = new SQLiteConnection(dbcon);
             conn.Open();
@@ -33,8 +33,19 @@ namespace CourseProject
             {
                 ClientComboBox.Items.Add(reader["Name"]);
             }
-            reader.Close();
+            reader.Close();*/
 
+            string dbcon = @"Data Source = AddOrder.db; Version=3;";
+            string query = "SELECT Name,Phone FROM Clients ORDER BY Name ASC;";
+            SQLiteConnection conn = new SQLiteConnection(dbcon);
+            conn.Open();
+            SQLiteCommand select_client = new SQLiteCommand(query, conn);
+            SQLiteDataAdapter ClientDA = new SQLiteDataAdapter(select_client);
+            DataTable ClientDT = new DataTable();
+            ClientDA.Fill(ClientDT);
+            ClientComboBox.SelectedValuePath = "id";
+            ClientComboBox.DisplayMemberPath = "Name";
+            ClientComboBox.ItemsSource = ClientDT.DefaultView;
 
             //Добавляем названия брендов в combobox
             string brand_query = "SELECT * FROM Brands;";
@@ -206,9 +217,105 @@ namespace CourseProject
 
         private void AddOrder_Click(object sender, RoutedEventArgs e)
         {
-            if ((ClientComboBox.SelectedIndex > -1) && (Brand.SelectedIndex > -1) && (TypeOfDevice.SelectedIndex > -1) && (Model.SelectedIndex > -1) && (Master.SelectedIndex > -1) && (Work.SelectedIndex > -1))
+            if (ClientComboBox.SelectedIndex > -1 && Brand.SelectedIndex > -1 && TypeOfDevice.SelectedIndex > -1 && Model.SelectedIndex > -1 && Master.SelectedIndex > -1 && Work.SelectedIndex > -1)
             {
-                System.Windows.Forms.MessageBox.Show("Все введенно");
+                string dbcon = @"Data Source = AddOrder.db; Version=3;";
+                SQLiteConnection conn = new SQLiteConnection(dbcon);
+                string brand_id_search = "SELECT id FROM Brands WHERE BrandName = @Name";
+                string type_id_search = "SELECT id FROM Types WHERE Name = @Name";
+                string device_search_for_id = "SELECT id FROM Devices WHERE TypeId = @TypeID AND BrandId = @BrandID AND Model = @Model";
+                string work_search_for_id = "SELECT id FROM Works WHERE DeviceID = @DeviceID";
+                string client_search_for_id = "SELECT id FROM Clients WHERE Name = @Name";
+                string master_search_for_id = "SELECT id FROM Masters WHERE Name = @Name";
+                string order_search = "SELECT * FROM Application WHERE ClientId = @ClientID AND DeviceId = @DeviceID AND WorkId = @WorkID AND MasterId = @MasterID";
+                string order_add = "INSERT INTO Application (ClientId, DeviceId, WorkId, MasterId) VALUES (@ClientID, @DeviceID, @WorkID, @MasterID)";
+
+                conn.Open();
+
+                /*SQLiteCommand device_search_for_id_command = new SQLiteCommand(device_search_for_id, conn);
+                device_search_for_id_command.Parameters.AddWithValue("@TypeID", TypeOfDevice.SelectedValue.ToString());
+                device_search_for_id_command.Parameters.AddWithValue("@BrandID", Brand.SelectedValue.ToString());
+                device_search_for_id_command.Parameters.AddWithValue("@Model", Model.SelectedValue.ToString());
+                SQLiteDataReader reader_id_device = device_search_for_id_command.ExecuteReader();
+                reader_id_device.Read();
+                int DeviceID = reader_id_device.GetInt32(0);
+                reader_id_device.Close();*/
+
+                //ищем id бренда
+                SQLiteCommand brand_id_search_command = new SQLiteCommand(brand_id_search, conn);
+                brand_id_search_command.Parameters.Add("@Name", DbType.String).Value = Brand.Text;
+                SQLiteDataReader reader_id_brand = brand_id_search_command.ExecuteReader();
+                reader_id_brand.Read();
+                int BrandID = reader_id_brand.GetInt32(0);
+                reader_id_brand.Close();
+
+                //ищем id типа
+                SQLiteCommand type_id_search_command = new SQLiteCommand(type_id_search, conn);
+                type_id_search_command.Parameters.Add("@Name", DbType.String).Value = TypeOfDevice.Text;
+                SQLiteDataReader reader_id_type = type_id_search_command.ExecuteReader();
+                reader_id_type.Read();
+                int TypeID = reader_id_type.GetInt32(0);
+                reader_id_brand.Close();
+
+                //ищем id девайса
+                SQLiteCommand device_search_for_id_command = new SQLiteCommand(device_search_for_id, conn);
+                device_search_for_id_command.Parameters.Add("@TypeID", DbType.Int32).Value = TypeID;
+                device_search_for_id_command.Parameters.Add("@BrandID", DbType.Int32).Value = BrandID;
+                device_search_for_id_command.Parameters.Add("@Model", DbType.String).Value = Model.Text;
+                SQLiteDataReader reader_id_device = device_search_for_id_command.ExecuteReader();
+                reader_id_device.Read();
+                int DeviceID = reader_id_device.GetInt32(0);
+                reader_id_device.Close();
+
+                //ищем id услуги
+                SQLiteCommand work_search_for_id_command = new SQLiteCommand(work_search_for_id, conn);
+                work_search_for_id_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
+                SQLiteDataReader reader_work_id = work_search_for_id_command.ExecuteReader();
+                reader_work_id.Read();
+                int WorkID = reader_work_id.GetInt32(0);
+                reader_work_id.Close();
+
+                //ищем id клиента
+                SQLiteCommand client_search_for_id_command = new SQLiteCommand(client_search_for_id, conn);
+                client_search_for_id_command.Parameters.Add("@Name", DbType.String).Value = ClientComboBox.Text;
+                SQLiteDataReader reader_client_id = client_search_for_id_command.ExecuteReader();
+                reader_client_id.Read();
+                int ClientID = reader_client_id.GetInt32(0);
+                reader_client_id.Close();
+
+                //ищем id мастера
+                SQLiteCommand master_search_for_id_command = new SQLiteCommand(master_search_for_id, conn);
+                master_search_for_id_command.Parameters.Add("@Name", DbType.String).Value = Master.Text;
+                SQLiteDataReader reader_master_id = master_search_for_id_command.ExecuteReader();
+                reader_master_id.Read();
+                int MasterID = reader_master_id.GetInt32(0);
+                reader_master_id.Close();
+
+                //ищем заявку по введенным параметрам
+                SQLiteCommand order_search_command = new SQLiteCommand(order_search, conn);
+                order_search_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
+                order_search_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
+                order_search_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
+                order_search_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
+
+                SQLiteDataAdapter orderDA = new SQLiteDataAdapter(order_search_command);
+                DataTable orderDT = new DataTable();
+                orderDA.Fill(orderDT);
+                if(orderDT.Rows.Count > 0) //если заявка с такими данными существует
+                {
+                    System.Windows.Forms.MessageBox.Show("Данная заявка уже существует");
+                }
+                else //в противном случае - добавляем
+                {
+                    SQLiteCommand add_order_command = new SQLiteCommand(order_add, conn);
+                    add_order_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
+                    add_order_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
+                    add_order_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
+                    add_order_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
+                    add_order_command.ExecuteNonQuery();
+                    conn.Close();
+                    System.Windows.Forms.MessageBox.Show("Заявка добавлена");
+                }
             }
         }
     }
