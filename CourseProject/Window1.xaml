@@ -54,13 +54,29 @@
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Foreground="Black"/>
-                        <TextBlock Text="Заявки"
+                        <TextBlock Text="Добавить заявку"
                                        VerticalAlignment="Center"
                                        Margin="10 10"
                                        Foreground="Black"
                                        FontSize="15"/>
                     </StackPanel>
                 </ListViewItem>
+                <ListViewItem x:Name="Orders" 
+                              MouseDoubleClick="Orders_MouseDoubleClick">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="ClipboardOutline"
+                                                     Width="25"
+                                                     Height="25"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Foreground="Black"/>
+                            <TextBlock Text="Заявки"
+                                       VerticalAlignment="Center"
+                                       Margin="10 10"
+                                       Foreground="Black"
+                                       FontSize="15"/>
+                        </StackPanel>
+                    </ListViewItem>
                 <ListViewItem x:Name="Order" MouseDoubleClick="AddClient_MouseDoubleClick">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Person"
@@ -76,7 +92,7 @@
                                        FontSize="15"/>
                     </StackPanel>
                 </ListViewItem>
-                <ListViewItem x:Name="DeleteOrder" MouseDoubleClick="Devices_MouseDoubleClick">
+                <ListViewItem x:Name="DeleteOrder"  MouseDoubleClick="Devices_MouseDoubleClick">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="CellphoneIphone"
                                                      Width="25"
@@ -124,10 +140,50 @@
             </ListView>
         </Grid>
         <Grid Width="860" HorizontalAlignment="Right"
+              x:Name="ActualOrders"
+              Visibility="Collapsed">
+            <DataGrid
+                x:Name="OrdersDataGrid"
+                GridLinesVisibility="None"
+                Width="860" Height="440" HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Foreground="White"
+                CanUserSortColumns="False"
+                AutoGenerateColumns="False">
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="FontWeight" Value="Light" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="286"
+                                        Header="Устройство"
+                                        Binding="{Binding Path=ClientId}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="286"
+                                        Header="Услуга"
+                                        Binding="{Binding Path=Date}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="288"
+                                        Header="Цена"
+                                        Binding="{Binding Path=Status}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Height="40"
+                  Margin="80,540,630,20">
+                <Button Width="150" Height="40"
+                    Content="Добавить девайс"
+                    Click="AddDeviceClick"
+                    />
+            </Grid>
+        </Grid>
+        <Grid Width="860" HorizontalAlignment="Right"
               x:Name="Main"
               >
             <DataGrid
                 x:Name="MainDataGrid"
+                
                 GridLinesVisibility="None"
                 Width="860" Height="440" HorizontalAlignment="Right"
                 VerticalAlignment="Center"
@@ -162,7 +218,8 @@
                 Background="Transparent"
                 Foreground="White"
                 CanUserSortColumns="False"
-                AutoGenerateColumns="False">
+                AutoGenerateColumns="False"
+                MouseDoubleClick="ClientsDataGrid_MouseDoubleClick">
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Foreground" Value="White" />
@@ -173,10 +230,12 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="430"
                                     Header="Имя клиента"
-                                    Binding="{Binding Path=Name}"></DataGridTextColumn>
+                                    Binding="{Binding Path=Name}"
+                                    IsReadOnly="True"></DataGridTextColumn>
                     <DataGridTextColumn Width="430"
                                     Header="Телефон"
-                                    Binding="{Binding Path=Phone}"></DataGridTextColumn>
+                                    Binding="{Binding Path=Phone}"
+                                    IsReadOnly="True"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Height="40"

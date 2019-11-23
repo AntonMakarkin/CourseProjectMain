@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Windows;
 using System.Windows.Controls;
+using System.Globalization;
 
 namespace CourseProject
 {
@@ -213,7 +214,6 @@ namespace CourseProject
             if (ClientComboBox.SelectedIndex > -1 && Brand.SelectedIndex > -1 && TypeOfDevice.SelectedIndex > -1 && Model.SelectedIndex > -1 && Master.SelectedIndex > -1 && Work.SelectedIndex > -1)
             {
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                SQLiteConnection conn = new SQLiteConnection(dbcon);
                 string brand_id_search = "SELECT id FROM Brands WHERE BrandName = @Name";
                 string type_id_search = "SELECT id FROM Types WHERE Name = @Name";
                 string device_search_for_id = "SELECT id FROM Devices WHERE TypeId = @TypeID AND BrandId = @BrandID AND Model = @Model";
@@ -221,8 +221,10 @@ namespace CourseProject
                 string client_search_for_id = "SELECT id FROM Clients WHERE Name = @Name";
                 string master_search_for_id = "SELECT id FROM Masters WHERE Name = @Name";
                 string order_search = "SELECT * FROM Application WHERE ClientId = @ClientID AND DeviceId = @DeviceID AND WorkId = @WorkID AND MasterId = @MasterID";
-                string order_add = "INSERT INTO Application (ClientId, DeviceId, WorkId, MasterId) VALUES (@ClientID, @DeviceID, @WorkID, @MasterID)";
+                //string order_add = "INSERT INTO Application (ClientId, DeviceId, WorkId, MasterId) VALUES (@ClientID, @DeviceID, @WorkID, @MasterID)";
+                string order_add = "INSERT INTO Application (ClientId, DeviceId, WorkId, MasterId, Date, Status) VALUES (@ClientID, @DeviceID, @WorkID, @MasterID, @Date, @Status)";
 
+                SQLiteConnection conn = new SQLiteConnection(dbcon);
                 conn.Open();
 
                 /*SQLiteCommand device_search_for_id_command = new SQLiteCommand(device_search_for_id, conn);
@@ -284,6 +286,14 @@ namespace CourseProject
                 int MasterID = reader_master_id.GetInt32(0);
                 reader_master_id.Close();
 
+                //создаем переменную со статусом заявки (по умолчанию - в процессе)
+                string Status = "В процессе";
+
+                //создаем переменную с датой
+                DateTime currentDate = DateTime.Today;
+                CultureInfo RU = new CultureInfo("ru-RU");
+                string Date = currentDate.ToString("D", RU);
+
                 //ищем заявку по введенным параметрам
                 SQLiteCommand order_search_command = new SQLiteCommand(order_search, conn);
                 order_search_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
@@ -305,6 +315,8 @@ namespace CourseProject
                     add_order_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
                     add_order_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
                     add_order_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
+                    add_order_command.Parameters.Add("@Date", DbType.String).Value = Date;
+                    add_order_command.Parameters.Add("@Status", DbType.String).Value = Status;
                     add_order_command.ExecuteNonQuery();
                     conn.Close();
                     System.Windows.Forms.MessageBox.Show("Заявка добавлена");

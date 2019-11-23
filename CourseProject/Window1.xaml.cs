@@ -51,10 +51,12 @@ namespace CourseProject
         private void AddClient_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Main.Visibility = Visibility.Collapsed;
+            OrdersDataGrid.Visibility = Visibility.Collapsed;
             Master.Visibility = Visibility.Collapsed;
             Devices.Visibility = Visibility.Collapsed;
             Clients.Visibility = Visibility.Visible;
             Work.Visibility = Visibility.Collapsed;
+            ActualOrders.Visibility = Visibility.Collapsed;
             string dbcon = "Data Source = AddOrder.db; Version = 3";
             string query = "SELECT Name,Phone FROM Clients";
             SQLiteConnection connection = new SQLiteConnection(dbcon);
@@ -79,13 +81,15 @@ namespace CourseProject
             MainDataGrid.ItemsSource = dt.DefaultView;
         }
 
-        private void Masters_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Masters_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             Main.Visibility = Visibility.Collapsed;
+            OrdersDataGrid.Visibility = Visibility.Collapsed;
             Clients.Visibility = Visibility.Collapsed;
             Devices.Visibility = Visibility.Collapsed;
             Master.Visibility = Visibility.Visible;
             Work.Visibility = Visibility.Collapsed;
+            ActualOrders.Visibility = Visibility.Collapsed;
             string dbcon = "Data Source = AddOrder.db; Version = 3";
             string query = "SELECT Name,Phone,IDNumber FROM Masters";
             SQLiteConnection connection = new SQLiteConnection(dbcon);
@@ -123,11 +127,13 @@ namespace CourseProject
 
         private void Works_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
+            OrdersDataGrid.Visibility = Visibility.Collapsed;
             Work.Visibility = Visibility.Visible;
             Main.Visibility = Visibility.Collapsed;
             Clients.Visibility = Visibility.Collapsed;
             Master.Visibility = Visibility.Collapsed;
             Devices.Visibility = Visibility.Collapsed;
+            ActualOrders.Visibility = Visibility.Collapsed;
             string dbcon = "Data Source = AddOrder.db; Version = 3";
             string query = "SELECT Works.Name, Works.Price, Works.DeviceID, Devices.id, Devices.Model FROM Works, Devices WHERE DeviceID = Devices.id;";
             SQLiteConnection connection = new SQLiteConnection(dbcon);
@@ -146,6 +152,8 @@ namespace CourseProject
             Master.Visibility = Visibility.Collapsed;
             Devices.Visibility = Visibility.Visible;
             Work.Visibility = Visibility.Collapsed;
+            OrdersDataGrid.Visibility = Visibility.Collapsed;
+            ActualOrders.Visibility = Visibility.Collapsed;
             string dbcon = "Data Source = AddOrder.db; Version = 3";
             //string query = "SELECT Тип,Бренд,Модель FROM Devices";
             string query = "SELECT Types.Name, Brands.BrandName, Devices.Model From Brands INNER JOIN(Types INNER JOIN Devices ON Types.id = Devices.TypeId) ON Brands.id = Devices.BrandId";
@@ -171,5 +179,44 @@ namespace CourseProject
             DT.Load(reader);
             MasterDataGrid.ItemsSource = DT.DefaultView;
         }
+
+        private void ClientsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGrid grid = sender as DataGrid;
+            if(grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+            {
+                DataGridRow dataGridRow = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
+                DataRowView rowView = (DataRowView)dataGridRow.Item;
+
+                string ClientName = rowView[0].ToString();
+                string ClientPhone = rowView[1].ToString();
+                //MessageBox.Show("Вы выбрали: \r\nИмя : " + ClientName + "\r\nТелефон : " + ClientPhone);
+                ShowAndEditClient window = new ShowAndEditClient();
+                window.FullName.Text = ClientName;
+                window.PhoneNumber.Text = ClientPhone;
+                window.ShowDialog();
+            }
+        }
+
+        private void Orders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Main.Visibility = Visibility.Collapsed;
+            Master.Visibility = Visibility.Collapsed;
+            Devices.Visibility = Visibility.Collapsed;
+            Clients.Visibility = Visibility.Collapsed;
+            Work.Visibility = Visibility.Collapsed;
+            ActualOrders.Visibility = Visibility.Visible;
+            string dbcon = "Data Source = AddOrder.db; Version = 3";
+            string query = "SELECT * FROM Application";
+            //string query = "SELECT Application.";
+            SQLiteConnection connection = new SQLiteConnection(dbcon);
+            connection.Open();
+            SQLiteCommand select_command = new SQLiteCommand(query, connection);
+            SQLiteDataReader reader = select_command.ExecuteReader();
+            DataTable dt = new DataTable(); //Создаем новый DataTable
+            dt.Load(reader); //Загружаем DataReader в DataTable
+            OrdersDataGrid.ItemsSource = dt.DefaultView;
+        }
+
     }
 }
