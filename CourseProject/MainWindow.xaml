@@ -120,7 +120,7 @@
                        Opacity="0.5"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,50,0,0" HorizontalAlignment="Center">
-                    <Button Click="LoginClick" Width="100" Height="40" Content="Войти"/>
+                    <Button Style="{StaticResource RoundButtonTemplate}" Click="LoginClick" Width="100" Height="40" Content="Войти"/>
                 </StackPanel>
             </StackPanel>
 

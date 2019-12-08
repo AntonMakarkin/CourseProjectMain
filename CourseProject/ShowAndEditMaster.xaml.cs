@@ -19,14 +19,14 @@ using MessageBox = System.Windows.MessageBox;
 namespace CourseProject
 {
     /// <summary>
-    /// Логика взаимодействия для ShowAndEditClient.xaml
+    /// Логика взаимодействия для ShowAndEditMaster.xaml
     /// </summary>
-    public partial class Window_Loaded : Window
+    public partial class ShowAndEditMaster : Window
     {
-        public static string ClientFullName;
-        public static string ClientPhoneNumber;
-        public static int ClientID;
-        public Window_Loaded()
+        public static string MasterFullName;
+        public static string MasterPhoneNumber;
+        public static int MasterID;
+        public ShowAndEditMaster()
         {
             InitializeComponent();
         }
@@ -97,7 +97,7 @@ namespace CourseProject
                 }
             }*/
 
-            
+
 
 
             if (CountWords < 3)
@@ -126,7 +126,7 @@ namespace CourseProject
                     SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
                     client_update_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
                     client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
-                    client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
+                    client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = MasterID;
                     client_update_command.ExecuteNonQuery();
                 }
 
@@ -148,7 +148,7 @@ namespace CourseProject
         {
             string dbcon = @"Data Source = AddOrder.db; Version=3;";
             string select_id_client = "SELECT id FROM Clients WHERE Name = @Name AND Phone = @Phone";
-            
+
             using (SQLiteConnection connection = new SQLiteConnection(dbcon))
             {
                 connection.Open();
@@ -159,7 +159,7 @@ namespace CourseProject
                 {
                     ClientIdReader.Read();
                     int ClientId = ClientIdReader.GetInt32(0);
-                    ClientID = ClientId;
+                    MasterID = MasterId;
                 }
             }
 
@@ -170,8 +170,8 @@ namespace CourseProject
             ClientID = ClientId;
             ClientIdReader.Close();*/
 
-            ClientFullName = FullName.Text;
-            ClientPhoneNumber = PhoneNumber.Text;
+            MasterFullName = FullName.Text;
+            MasterPhoneNumber = PhoneNumber.Text;
             FullName.IsReadOnly = false;
             PhoneNumber.IsReadOnly = false;
             Edit.Visibility = Visibility.Collapsed;
@@ -185,8 +185,8 @@ namespace CourseProject
             Return.Visibility = Visibility.Collapsed;
             FullName.IsReadOnly = true;
             PhoneNumber.IsReadOnly = true;
-            FullName.Text = ClientFullName;
-            PhoneNumber.Text = ClientPhoneNumber;
+            FullName.Text = MasterFullName;
+            PhoneNumber.Text = MasterPhoneNumber;
             Edit.Visibility = Visibility.Visible;
             Delete.Visibility = Visibility.Visible;
             Return.Visibility = Visibility.Collapsed;
@@ -198,20 +198,12 @@ namespace CourseProject
         {
             DeleteClientModalWindow window = new DeleteClientModalWindow();
 
-            if(window.ShowDialog() == true)
+            if (window.ShowDialog() == true)
             {
                 Hide();
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
                 string delete_client = "DELETE FROM Clients WHERE Name = @Name AND Phone = @Phone";
-                /*SQLiteConnection connection = new SQLiteConnection(dbcon);
-                connection.Open();
-
-                SQLiteCommand delete_client_command = new SQLiteCommand(delete_client, connection);
-                delete_client_command.Parameters.Add("@Name", DbType.String).Value = FullName.Text;
-                delete_client_command.Parameters.Add("@Phone", DbType.String).Value = PhoneNumber.Text;
-                delete_client_command.ExecuteNonQuery();
-                connection.Close();*/
-
+                
                 using (SQLiteConnection connection = new SQLiteConnection(dbcon))
                 {
                     connection.Open();
@@ -221,7 +213,7 @@ namespace CourseProject
                     delete_client_command.ExecuteNonQuery();
                 }
 
-                string message = "Клиент удален";
+                string message = "Мастер удален";
                 string caption = "Сообщение";
                 MessageBoxButton button = MessageBoxButton.OK;
                 MessageBoxImage icon = MessageBoxImage.Information;

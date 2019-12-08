@@ -146,6 +146,7 @@
                   >
                 <Button Height="40"
                     Content="Добавить"
+                        Style="{StaticResource RoundButtonTemplate}"
                         Click="AddNewDevice"
                     />
             </Grid>

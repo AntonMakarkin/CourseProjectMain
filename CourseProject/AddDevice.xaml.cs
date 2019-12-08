@@ -93,7 +93,7 @@ namespace CourseProject
                     command_brands.Connection = connection;
                     command_brands.Parameters.Add("@BrandName", DbType.String).Value = BrandComboBox.Text;
                     command_brands.ExecuteNonQuery();
-                    System.Windows.Forms.MessageBox.Show("Бренд добавлен");
+                    //System.Windows.Forms.MessageBox.Show("Бренд добавлен");
                 }
 
 
@@ -116,7 +116,7 @@ namespace CourseProject
                     command_types.Connection = connection;
                     command_types.Parameters.Add("@BrandName", DbType.String).Value = BrandComboBox.Text;
                     command_types.ExecuteNonQuery();
-                    System.Windows.Forms.MessageBox.Show("Тип добавлен");
+                    //System.Windows.Forms.MessageBox.Show("Тип добавлен");
                 }
 
 

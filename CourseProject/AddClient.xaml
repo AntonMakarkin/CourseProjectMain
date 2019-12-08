@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
         xmlns:local="clr-namespace:CourseProject"
         mc:Ignorable="d"
         Title="AddClient" Height="250" Width="400"
@@ -12,8 +13,8 @@
         <Border>
             <Border.Background>
                 <LinearGradientBrush>
-                    <GradientStop Color="#009FFD" Offset="0.0"/>
-                    <GradientStop Color="#2A2A72" Offset="1"/>
+                    <GradientStop Color="#0acffe" Offset="0"/>
+                    <GradientStop Color="#495aff" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
@@ -68,6 +69,7 @@
             Номер телефона
         </Label>
         <TextBox
+            
             x:Name="PhoneNumber"
             FontFamily="Helvetica"
             FontWeight="Light"
@@ -83,6 +85,7 @@
                        Opacity="0.5" Margin="180,152,40,96"/>
         <StackPanel Orientation="Horizontal" Margin="148,170,152,10" HorizontalAlignment="Center">
             <Button Width="100" Height="40" Content="Добавить" Margin="0,0,0,0"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Click="Button_Click"/>
         </StackPanel>
 

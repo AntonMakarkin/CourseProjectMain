@@ -40,8 +40,8 @@ namespace CourseProject
         {
             //по клику на кнопку Добавить - добавляем клиента в соответствующую таблицу БД
             string dbcon = "Data Source = AddOrder.db; Version=3;";
-            string query_search = "SELECT * FROM Clients WHERE Name = @Name AND Number = @Phone";
-            string query = "INSERT INTO Clients (Name, Number) VALUES (@Name, @Phone)";
+            string query_search = "SELECT * FROM Clients WHERE Name = @Name AND Phone = @Phone";
+            string query = "INSERT INTO Clients (Name, Phone) VALUES (@Name, @Phone)";
             SQLiteConnection connection = new SQLiteConnection(dbcon);
             connection.Open();
             SQLiteCommand command_search = new SQLiteCommand(query_search, connection);

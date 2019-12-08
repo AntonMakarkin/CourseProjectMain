@@ -63,20 +63,20 @@
                 </ListViewItem>
                 <ListViewItem x:Name="Orders" 
                               MouseDoubleClick="Orders_MouseDoubleClick">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ClipboardOutline"
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ClipboardOutline"
                                                      Width="25"
                                                      Height="25"
                                                      Margin="10"
                                                      VerticalAlignment="Center"
                                                      Foreground="Black"/>
-                            <TextBlock Text="Заявки"
+                        <TextBlock Text="Заявки"
                                        VerticalAlignment="Center"
                                        Margin="10 10"
                                        Foreground="Black"
                                        FontSize="15"/>
-                        </StackPanel>
-                    </ListViewItem>
+                    </StackPanel>
+                </ListViewItem>
                 <ListViewItem x:Name="Order" MouseDoubleClick="AddClient_MouseDoubleClick">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Person"
@@ -140,6 +140,35 @@
             </ListView>
         </Grid>
         <Grid Width="860" HorizontalAlignment="Right"
+              x:Name="Main"
+              >
+            <DataGrid
+                x:Name="MainDataGrid"
+                GridLinesVisibility="None"
+                Width="860" Height="440" HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Foreground="White"
+                CanUserSortColumns="False"
+                >
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="FontWeight" Value="Light" />
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+            <Grid Height="40"
+                  Margin="80,540,630,20">
+                <Button Width="150" Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Content="Добавить клиента"
+                    Click="AddClientClick"
+                    />
+            </Grid>
+        </Grid>
+        <Grid Width="860" HorizontalAlignment="Right"
               x:Name="ActualOrders"
               Visibility="Collapsed">
             <DataGrid
@@ -173,37 +202,9 @@
             <Grid Height="40"
                   Margin="80,540,630,20">
                 <Button Width="150" Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Content="Добавить девайс"
                     Click="AddDeviceClick"
-                    />
-            </Grid>
-        </Grid>
-        <Grid Width="860" HorizontalAlignment="Right"
-              x:Name="Main"
-              >
-            <DataGrid
-                x:Name="MainDataGrid"
-                
-                GridLinesVisibility="None"
-                Width="860" Height="440" HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Background="Transparent"
-                Foreground="White"
-                CanUserSortColumns="False"
-                >
-                <DataGrid.Resources>
-                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="FontSize" Value="15" />
-                        <Setter Property="FontWeight" Value="Light" />
-                    </Style>
-                </DataGrid.Resources>
-            </DataGrid>
-            <Grid Height="40"
-                  Margin="80,540,630,20">
-                <Button Width="150" Height="40"
-                    Content="Добавить клиента"
-                    Click="AddClientClick"
                     />
             </Grid>
         </Grid>
@@ -241,6 +242,7 @@
             <Grid Height="40"
                   Margin="80,540,630,20">
                 <Button Width="150" Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Content="Добавить клиента"
                     Click="AddClientClick"
                     />
@@ -280,6 +282,7 @@
             <Grid Height="40"
                   Margin="80,540,630,20">
                 <Button Width="150" Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Content="Добавить девайс"
                     Click="AddDeviceClick"
                     />
@@ -291,6 +294,7 @@
               >
             <DataGrid
                 x:Name="MasterDataGrid"
+                MouseDoubleClick="MasterDataGrid_MouseDoubleClick"
                 GridLinesVisibility="None"
                 Width="860" Height="440" HorizontalAlignment="Right"
                 VerticalAlignment="Center"
@@ -325,6 +329,7 @@
                     Click="AddMasterClick"
                     />
             <Button Width="150" Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Content="Обновить"
                     Margin="310,540,400,20"
                     Click="RefreshClick"
@@ -364,6 +369,7 @@
             <Grid Height="40"
                   Margin="80,540,630,20">
                 <Button Width="150" Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Content="Добавить услуги"
                     Click="AddWorkClick"
                     />
