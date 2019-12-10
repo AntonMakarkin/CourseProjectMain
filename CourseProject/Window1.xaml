@@ -340,6 +340,7 @@
               Visibility="Collapsed">
             <DataGrid
                 x:Name="WorksDataGrid"
+                MouseDoubleClick="WorksDataGrid_MouseDoubleClick"
                 GridLinesVisibility="None"
                 Width="860" Height="440" HorizontalAlignment="Right"
                 VerticalAlignment="Center"

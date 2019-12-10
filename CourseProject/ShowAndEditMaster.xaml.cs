@@ -108,25 +108,15 @@ namespace CourseProject
             {
                 Attention.Visibility = Visibility.Hidden;
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string client_update = "UPDATE Clients SET Name = @ClientName, Phone = @ClientPhone WHERE id = @ClientID";
-                //string client_update = "UPDATE Clients SET id = @ClientID WHERE Name = @ClientName AND Phone = @ClientPhone";
-                /*SQLiteConnection connection = new SQLiteConnection(dbcon);
-                connection.Open();
-
-                SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
-                client_update_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
-                client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
-                client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
-                client_update_command.ExecuteNonQuery();
-                connection.Close();*/
+                string client_update = "UPDATE Masters SET Name = @MasterName, Phone = @MasterPhone WHERE id = @MasterID";
 
                 using (SQLiteConnection connection = new SQLiteConnection(dbcon))
                 {
                     connection.Open();
                     SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
-                    client_update_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
-                    client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
-                    client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = MasterID;
+                    client_update_command.Parameters.Add("@MasterName", DbType.String).Value = FullName.Text;
+                    client_update_command.Parameters.Add("@MasterPhone", DbType.String).Value = PhoneNumber.Text;
+                    client_update_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
                     client_update_command.ExecuteNonQuery();
                 }
 
@@ -147,28 +137,21 @@ namespace CourseProject
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             string dbcon = @"Data Source = AddOrder.db; Version=3;";
-            string select_id_client = "SELECT id FROM Clients WHERE Name = @Name AND Phone = @Phone";
+            string select_id_master = "SELECT id FROM Masters WHERE Name = @Name AND Phone = @Phone";
 
             using (SQLiteConnection connection = new SQLiteConnection(dbcon))
             {
                 connection.Open();
-                SQLiteCommand select_id_client_command = new SQLiteCommand(select_id_client, connection);
-                select_id_client_command.Parameters.Add("@Name", DbType.String).Value = FullName.Text;
-                select_id_client_command.Parameters.Add("@Phone", DbType.String).Value = PhoneNumber.Text;
-                using (SQLiteDataReader ClientIdReader = select_id_client_command.ExecuteReader())
+                SQLiteCommand select_id_master_command = new SQLiteCommand(select_id_master, connection);
+                select_id_master_command.Parameters.Add("@Name", DbType.String).Value = FullName.Text;
+                select_id_master_command.Parameters.Add("@Phone", DbType.String).Value = PhoneNumber.Text;
+                using (SQLiteDataReader MasterIdReader = select_id_master_command.ExecuteReader())
                 {
-                    ClientIdReader.Read();
-                    int ClientId = ClientIdReader.GetInt32(0);
+                    MasterIdReader.Read();
+                    int MasterId = MasterIdReader.GetInt32(0);
                     MasterID = MasterId;
                 }
             }
-
-
-            /*SQLiteDataReader ClientIdReader = select_id_client_command.ExecuteReader();
-            ClientIdReader.Read();
-            int ClientId = ClientIdReader.GetInt32(0);
-            ClientID = ClientId;
-            ClientIdReader.Close();*/
 
             MasterFullName = FullName.Text;
             MasterPhoneNumber = PhoneNumber.Text;
@@ -197,12 +180,13 @@ namespace CourseProject
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             DeleteClientModalWindow window = new DeleteClientModalWindow();
+            window.MainText.Text = "Вы действительно хотите удалить данного мастера?";
 
             if (window.ShowDialog() == true)
             {
                 Hide();
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string delete_client = "DELETE FROM Clients WHERE Name = @Name AND Phone = @Phone";
+                string delete_client = "DELETE FROM Masters WHERE Name = @Name AND Phone = @Phone";
                 
                 using (SQLiteConnection connection = new SQLiteConnection(dbcon))
                 {
@@ -221,6 +205,5 @@ namespace CourseProject
 
             }
         }
-
     }
-}
+} 

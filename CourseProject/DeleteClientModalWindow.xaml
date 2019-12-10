@@ -45,7 +45,7 @@
                                      Width="40"
                                      Height="40"
                                      Margin="30,0,0,0"/>
-            <TextBlock Text="Вы действительно хотите удалить данного клиента?"
+            <TextBlock x:Name="MainText" Text="Вы действительно хотите удалить данного клиента?"
                                        Width="200"
                                        TextWrapping="Wrap"
                                        VerticalAlignment="Center"

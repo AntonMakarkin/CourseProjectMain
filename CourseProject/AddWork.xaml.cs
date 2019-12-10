@@ -78,6 +78,7 @@ namespace CourseProject
             if (workDT.Rows.Count > 0)
             {
                 System.Windows.Forms.MessageBox.Show("Данное услуга уже существует");
+                connection_works.Close();
             }
             else
             {
@@ -87,6 +88,7 @@ namespace CourseProject
                 query_insert_work_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
                 query_insert_work_command.ExecuteNonQuery();
                 System.Windows.Forms.MessageBox.Show("Услуга добавлена");
+                connection_works.Close();
             }
         }
 

@@ -262,5 +262,42 @@ namespace CourseProject
                 window.ShowDialog();
             }
         }
+
+        private void WorksDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGrid grid = sender as DataGrid;
+            if (grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+            {
+                DataGridRow dataGridRow = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
+                DataRowView rowView = (DataRowView)dataGridRow.Item;
+
+                string WorkName = rowView[0].ToString();
+                string WorkPrice = rowView[1].ToString();
+                string DeviceModel = rowView[2].ToString();
+                int DeviceID = int.Parse(DeviceModel);
+                ShowAndEditWork window = new ShowAndEditWork();
+                window.WorkTextBox.Text = WorkName;
+                window.Price.Text = WorkPrice;
+
+                string dbcon = @"Data Source = AddOrder.db; Version=3;";
+                string SelectModel = "SELECT Model FROM Devices WHERE id = @DeviceID";
+
+                using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                {
+                    connection.Open();
+                    SQLiteCommand SelectModel_command = new SQLiteCommand(SelectModel, connection);
+                    SelectModel_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
+
+                    using (SQLiteDataReader reader = SelectModel_command.ExecuteReader())
+                    {
+                        reader.Read();
+                        string Model = reader.GetString(0);
+                        window.ModelDevice.Text = Model;
+                    }
+                }
+
+                window.ShowDialog();
+            }
+        }
     }
 }

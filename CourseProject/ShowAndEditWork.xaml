@@ -1,4 +1,4 @@
-﻿<Window x:Class="CourseProject.AddWork"
+﻿<Window x:Class="CourseProject.ShowAndEditWork"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -139,13 +139,25 @@
                 Margin="106,267,44,121"/>
             <Grid Height="40"
                   Width="100"
-                  Margin="0,280,0,0"
+                  Margin="0,280,150,0"
+                  >
+                <Button Height="40"
+                    x:Name="Edit"
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Content="Изменить"
+                    Click="Edit_Click"
+                    />
+            </Grid>
+            <Grid Height="40"
+                  Width="100"
+                  Margin="150,280,0,0"
                   HorizontalAlignment="Center"
                   >
                 <Button Height="40"
+                    x:Name="Delete"
                     Style="{StaticResource RoundButtonTemplate}"
-                    Content="Добавить"
-                    Click="Add_Work"
+                    Content="Удалить"
+                    Click="Delete_Click"
                     />
             </Grid>
         </Grid>
