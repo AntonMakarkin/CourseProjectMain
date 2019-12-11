@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseProject"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="AddWork" Height="350" Width="400"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
@@ -18,7 +19,7 @@
             </Border.Background>
         </Border>
         <Grid Height="60" VerticalAlignment="Top">
-            <TextBlock Text="Добавление услуги"
+            <TextBlock Text="Информация об услуге"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        FontSize="15"
@@ -150,6 +151,18 @@
             </Grid>
             <Grid Height="40"
                   Width="100"
+                  Margin="0,280,150,0"
+                  >
+                <Button Height="40"
+                    x:Name="Return"
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Content="Отменить"
+                    Click="Return_Click"
+                    Visibility="Collapsed"
+                    />
+            </Grid>
+            <Grid Height="40"
+                  Width="100"
                   Margin="150,280,0,0"
                   HorizontalAlignment="Center"
                   >
@@ -158,6 +171,19 @@
                     Style="{StaticResource RoundButtonTemplate}"
                     Content="Удалить"
                     Click="Delete_Click"
+                    />
+            </Grid>
+            <Grid Height="40"
+                  Width="100"
+                  Margin="150,280,0,0"
+                  HorizontalAlignment="Center"
+                  >
+                <Button Height="40"
+                    x:Name="Save"
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Content="Сохранить"
+                    Click="Save_Click"
+                    Visibility="Collapsed"
                     />
             </Grid>
         </Grid>
