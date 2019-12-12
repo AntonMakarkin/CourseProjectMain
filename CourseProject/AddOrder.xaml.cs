@@ -323,5 +323,10 @@ namespace CourseProject
                 }
             }
         }
+
+        private void ClientComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -77,6 +77,22 @@
                                        FontSize="15"/>
                     </StackPanel>
                 </ListViewItem>
+                <ListViewItem x:Name="ClosedOrders" 
+                              MouseDoubleClick="Orders_MouseDoubleClick">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ClipboardCheck"
+                                                     Width="25"
+                                                     Height="25"
+                                                     Margin="10"
+                                                     VerticalAlignment="Center"
+                                                     Foreground="Black"/>
+                        <TextBlock Text="Выполнен. заявки"
+                                       VerticalAlignment="Center"
+                                       Margin="10 10"
+                                       Foreground="Black"
+                                       FontSize="15"/>
+                    </StackPanel>
+                </ListViewItem>
                 <ListViewItem x:Name="Order" MouseDoubleClick="AddClient_MouseDoubleClick">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Person"
@@ -259,7 +275,8 @@
                 Background="Transparent"
                 Foreground="White"
                 CanUserSortColumns="False"
-                AutoGenerateColumns="False">
+                AutoGenerateColumns="False"
+                MouseDoubleClick="DevicesDataGrid_MouseDoubleClick">
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Foreground" Value="White" />

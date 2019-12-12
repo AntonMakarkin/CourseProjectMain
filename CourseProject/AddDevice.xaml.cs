@@ -173,5 +173,10 @@ namespace CourseProject
                 
             }
         }
+
+        private void BrandComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

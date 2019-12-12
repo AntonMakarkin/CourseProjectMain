@@ -90,40 +90,11 @@ namespace CourseProject
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
-            /*string dbcon = @"Data Source = AddOrder.db; Version=3;";
-            string search_device_id = "SELECT id FROM Devices WHERE Model = @ModelName";
-            string search_workId = "SELECT id FROM Works WHERE Name = @WorkName AND DeviceID = @DeviceID";
-
-            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
-            {
-                connection.Open();
-                SQLiteCommand search_device_id_command = new SQLiteCommand(search_device_id, connection);
-                search_device_id_command.Parameters.Add("@ModelName", DbType.String).Value = ModelDevice.Text;
-
-                using (SQLiteDataReader DeviceIdReader = search_device_id_command.ExecuteReader())
-                {
-                    DeviceIdReader.Read();
-                    int DeviceID = DeviceIdReader.GetInt32(0);
-                    DeviceIDdb = DeviceID;
-                }
-
-                SQLiteCommand search_workId_command = new SQLiteCommand(search_workId, connection);
-                search_workId_command.Parameters.Add("@WorkName", DbType.String).Value = WorkTextBox.Text;
-                search_workId_command.Parameters.Add("@DeviceID", DbType.String).Value = DeviceIDdb;
-
-                using (SQLiteDataReader WorkIdReader = search_workId_command.ExecuteReader())
-                {
-                    WorkIdReader.Read();
-                    int WorkId = WorkIdReader.GetInt32(0);
-                    WorkID = WorkId;
-                }
-            }*/
-
             WorkName = WorkTextBox.Text;
             Model = ModelDevice.Text;
             Cost = Price.Text;
             WorkTextBox.IsReadOnly = false;
-            ModelDevice.IsEditable = true;
+            ModelDevice.IsEnabled = true;
             Edit.Visibility = Visibility.Collapsed;
             Return.Visibility = Visibility.Visible;
             Delete.Visibility = Visibility.Collapsed;
@@ -168,17 +139,32 @@ namespace CourseProject
             else
             {
                 attention.Visibility = Visibility.Hidden;
+                string PriceNumber = Price.Text.Trim();
+                int PriceNumberInt = int.Parse(PriceNumber);
+
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string client_update = "UPDATE Works SET Name = @WorkName, Price = @WorkPrice, DeviceID = @DeviceID WHERE id = @WorkID";
+                string search_device_id = "SELECT id FROM Devices WHERE Model = @ModelName";
+                string work_update = "UPDATE Works SET Name = @WorkName, Price = @WorkPrice, DeviceID = @DeviceID WHERE id = @WorkID";
 
                 using (SQLiteConnection connection = new SQLiteConnection(dbcon))
                 {
                     connection.Open();
-                    SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
-                    //client_update_command.Parameters.Add("@MasterName", DbType.String).Value = FullName.Text;
-                    //client_update_command.Parameters.Add("@MasterPhone", DbType.String).Value = PhoneNumber.Text;
-                    //client_update_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
-                    client_update_command.ExecuteNonQuery();
+                    SQLiteCommand search_device_id_command = new SQLiteCommand(search_device_id, connection);
+                    search_device_id_command.Parameters.Add("@ModelName", DbType.String).Value = ModelDevice.Text;
+
+                    using (SQLiteDataReader DeviceIdReader = search_device_id_command.ExecuteReader())
+                    {
+                        DeviceIdReader.Read();
+                        int DeviceIDForQuery = DeviceIdReader.GetInt32(0);
+                        DeviceIDdb = DeviceIDForQuery;
+                    }
+
+                    SQLiteCommand work_update_command = new SQLiteCommand(work_update, connection);
+                    work_update_command.Parameters.Add("@WorkName", DbType.String).Value = WorkTextBox.Text;
+                    work_update_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceIDdb;
+                    work_update_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
+                    work_update_command.Parameters.Add("@WorkPrice", DbType.Int32).Value = PriceNumberInt;
+                    work_update_command.ExecuteNonQuery();
                 }
 
                 string message = "Данные успешно изменены";

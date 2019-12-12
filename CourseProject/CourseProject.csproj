@@ -153,6 +153,9 @@
     <Compile Include="ShowAndEditClient.xaml.cs">
       <DependentUpon>ShowAndEditClient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShowAndEditDevice.xaml.cs">
+      <DependentUpon>ShowAndEditDevice.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShowAndEditMaster.xaml.cs">
       <DependentUpon>ShowAndEditMaster.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShowAndEditClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShowAndEditDevice.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
