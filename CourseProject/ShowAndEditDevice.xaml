@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseProject"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="AddDevice" Height="350" Width="400"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
@@ -121,17 +122,15 @@
             <TextBox
                 x:Name="ModelDevice"
                 FontFamily="Helvetica"
+                IsReadOnly="True"
                             FontWeight="Light"
                             FontSize="14"
                             HorizontalAlignment="Center"
                             Foreground="White"
-                            Background="Transparent"
-                            BorderThickness="0"
                             Width="250"
-                            HorizontalContentAlignment="Left"
                             Opacity="0.5"
                             Height="25"
-                            Margin="106,244,44,121" Cursor=""
+                            Margin="106,244,44,121"
                 />
             <Border
                 Background="White"

@@ -130,7 +130,7 @@
                             HorizontalContentAlignment="Left"
                             Opacity="0.5"
                             Height="25"
-                            Margin="106,244,44,121" Cursor=""
+                            Margin="106,244,44,121" 
                 />
             <Border
                 Background="White"

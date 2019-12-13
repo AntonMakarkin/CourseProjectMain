@@ -305,8 +305,8 @@ namespace CourseProject
                 DataGridRow dataGridRow = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
                 DataRowView rowView = (DataRowView)dataGridRow.Item;
 
-                string BrandName = rowView[0].ToString();
-                string TypeName = rowView[1].ToString();
+                string TypeName = rowView[0].ToString();
+                string BrandName = rowView[1].ToString();
                 string Model = rowView[2].ToString();
                 ShowAndEditDevice window = new ShowAndEditDevice();
 
@@ -332,7 +332,9 @@ namespace CourseProject
                 window.BrandComboBox.Text = BrandName;
                 window.TypeDevice.Text = TypeName;
                 window.ModelDevice.Text = Model;
-                window.ModelDevice.IsEnabled = false;
+                window.BrandComboBox.IsEnabled = false;
+                window.TypeDevice.IsEnabled = false;
+                window.ModelDevice.IsReadOnly = true;
                 window.ShowDialog();
             }
         }
