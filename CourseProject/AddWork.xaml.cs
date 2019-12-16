@@ -53,8 +53,8 @@ namespace CourseProject
         {
             string dbcon = @"Data Source = AddOrder.db; Version=3;";
             string query_select_DeviceID = "SELECT id FROM Devices WHERE Model = @ModelName";
-            string query_search_work = "SELECT Name, Price, DeviceID FROM Works WHERE Name = @NameSelect AND Price = @PriceSelect AND DeviceID = @DeviceIDSelect;";
-            string query_insert_work = "INSERT INTO Works (Name, Price, DeviceID) VALUES (@Name, @Price, @DeviceID);";
+            string query_search_work = "SELECT WorkName, Price, DeviceID FROM Works WHERE WorkName = @NameSelect AND Price = @PriceSelect AND DeviceID = @DeviceIDSelect;";
+            string query_insert_work = "INSERT INTO Works (WorkName, Price, DeviceID) VALUES (@Name, @Price, @DeviceID);";
             SQLiteConnection connection_works = new SQLiteConnection(dbcon);
             connection_works.Open();
 

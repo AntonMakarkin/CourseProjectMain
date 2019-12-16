@@ -64,13 +64,13 @@ namespace CourseProject
 
 
             //Добавляем мастеров в combobox
-            string master_query = "SELECT Name FROM Masters;";
+            string master_query = "SELECT MasterName FROM Masters;";
             SQLiteCommand master_command = new SQLiteCommand(master_query, conn);
             SQLiteDataReader master_reader = master_command.ExecuteReader();
 
             while (master_reader.Read())
             {
-                Master.Items.Add(master_reader["Name"]);
+                Master.Items.Add(master_reader["MasterName"]);
             }
             master_reader.Close();
             conn.Close();
@@ -198,7 +198,7 @@ namespace CourseProject
             DataTable WorkDT = new DataTable();
             WorkDA.Fill(WorkDT);
             Work.SelectedValuePath = "id";
-            Work.DisplayMemberPath = "Name";
+            Work.DisplayMemberPath = "WorkName";
             Work.ItemsSource = WorkDT.DefaultView;
             Work.IsEnabled = true;
             TypeOfDevice.IsEnabled = false;
@@ -219,7 +219,7 @@ namespace CourseProject
                 string device_search_for_id = "SELECT id FROM Devices WHERE TypeId = @TypeID AND BrandId = @BrandID AND Model = @Model";
                 string work_search_for_id = "SELECT id FROM Works WHERE DeviceID = @DeviceID";
                 string client_search_for_id = "SELECT id FROM Clients WHERE Name = @Name";
-                string master_search_for_id = "SELECT id FROM Masters WHERE Name = @Name";
+                string master_search_for_id = "SELECT id FROM Masters WHERE MasterName = @Name";
                 string order_search = "SELECT * FROM Application WHERE ClientId = @ClientID AND DeviceId = @DeviceID AND WorkId = @WorkID AND MasterId = @MasterID";
                 //string order_add = "INSERT INTO Application (ClientId, DeviceId, WorkId, MasterId) VALUES (@ClientID, @DeviceID, @WorkID, @MasterID)";
                 string order_add = "INSERT INTO Application (ClientId, DeviceId, WorkId, MasterId, Date, Status) VALUES (@ClientID, @DeviceID, @WorkID, @MasterID, @Date, @Status)";

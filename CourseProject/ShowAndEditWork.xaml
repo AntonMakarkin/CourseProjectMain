@@ -49,6 +49,16 @@
                 Margin="0,-180,0,0" RenderTransformOrigin="0.555,-1.387">
                 Введите все данные
             </Label>
+            <Label 
+                x:Name="attention_1"
+                HorizontalAlignment="Center"
+                Width="180"
+                Height="30"
+                Foreground="Red"
+                Visibility="Hidden"
+                Margin="0,-180,0,0" RenderTransformOrigin="0.555,-1.387">
+                Данная услуга уже существует
+            </Label>
             <Label
                 Width="49"
                 Height="30"
@@ -127,10 +137,10 @@
                             Background="Transparent"
                             BorderThickness="0"
                             Width="250"
-                            HorizontalContentAlignment="Left"
                             Opacity="0.5"
                             Height="25"
-                            Margin="106,244,44,121" 
+                            Margin="106,244,44,121"
+                            IsReadOnly="True"
                 />
             <Border
                 Background="White"

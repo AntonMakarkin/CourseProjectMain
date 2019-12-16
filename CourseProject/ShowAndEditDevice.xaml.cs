@@ -137,6 +137,7 @@ namespace CourseProject
             Return.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Collapsed;
             attention.Visibility = Visibility.Hidden;
+            attention_1.Visibility = Visibility.Hidden;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -148,51 +149,90 @@ namespace CourseProject
             else
             {
                 attention.Visibility = Visibility.Hidden;
-                string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string brand_id_search = "SELECT id FROM Brands WHERE BrandName = @Name";
-                string type_id_search = "SELECT id FROM Types WHERE Name = @Name";
-                string device_update = "UPDATE Devices SET TypeId = @TypeID, BrandId = @BrandID, Model = @Model WHERE id = @DeviceID";
-
-                using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                if (BrandComboBox.Text == Brand && TypeDevice.Text == Type && ModelDevice.Text == Model)
                 {
-                    connection.Open();
-                    SQLiteCommand brand_id_search_command = new SQLiteCommand(brand_id_search, connection);
-                    brand_id_search_command.Parameters.Add("@Name", DbType.String).Value = BrandComboBox.Text;
-                    
-                    using (SQLiteDataReader BrandIdReader = brand_id_search_command.ExecuteReader())
-                    {
-                        BrandIdReader.Read();
-                        int BrandId = BrandIdReader.GetInt32(0);
-                        BrandID = BrandId;
-                    }
-
-                    SQLiteCommand type_id_search_command = new SQLiteCommand(type_id_search, connection);
-                    type_id_search_command.Parameters.Add("@Name", DbType.String).Value = TypeDevice.Text;
-
-                    using (SQLiteDataReader TypeIdReader = type_id_search_command.ExecuteReader())
-                    {
-                        TypeIdReader.Read();
-                        int TypeId = TypeIdReader.GetInt32(0);
-                        TypeID = TypeId;
-                    }
-
-                    SQLiteCommand device_update_command = new SQLiteCommand(device_update, connection);
-                    device_update_command.Parameters.Add("@TypeID", DbType.Int32).Value = TypeID;
-                    device_update_command.Parameters.Add("@BrandID", DbType.Int32).Value = BrandID;
-                    device_update_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
-                    device_update_command.Parameters.Add("@Model", DbType.String).Value = ModelDevice.Text;
-                    device_update_command.ExecuteNonQuery();
-
-                    string message = "Данные успешно изменены";
-                    string caption = "Сообщение";
-                    MessageBoxButton button = MessageBoxButton.OK;
-                    MessageBoxImage icon = MessageBoxImage.Information;
-                    MessageBox.Show(message, caption, button, icon);
-                    Close();
+                    BrandComboBox.Text = Brand;
+                    TypeDevice.Text = Type;
+                    ModelDevice.Text = Model;
+                    BrandComboBox.IsEnabled = false;
+                    TypeDevice.IsEnabled = false;
+                    ModelDevice.IsReadOnly = true;
+                    Edit.Visibility = Visibility.Visible;
+                    Delete.Visibility = Visibility.Visible;
+                    Return.Visibility = Visibility.Collapsed;
+                    Save.Visibility = Visibility.Collapsed;
+                    attention.Visibility = Visibility.Hidden;
                 }
+                else
+                {
+                    string dbcon = @"Data Source = AddOrder.db; Version=3;";
+                    string brand_id_search = "SELECT id FROM Brands WHERE BrandName = @Name";
+                    string type_id_search = "SELECT id FROM Types WHERE Name = @Name";
+                    string device_search = "SELECT id FROM Devices WHERE TypeId = @TypeID AND BrandId = @BrandID AND Model = @Model AND id != @DeviceID";
+                    string device_update = "UPDATE Devices SET TypeId = @TypeID, BrandId = @BrandID, Model = @Model WHERE id = @DeviceID";
 
+                    using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                    {
+                        connection.Open();
+                        SQLiteCommand brand_id_search_command = new SQLiteCommand(brand_id_search, connection);
+                        brand_id_search_command.Parameters.Add("@Name", DbType.String).Value = BrandComboBox.Text;
+
+                        using (SQLiteDataReader BrandIdReader = brand_id_search_command.ExecuteReader())
+                        {
+                            BrandIdReader.Read();
+                            int BrandId = BrandIdReader.GetInt32(0);
+                            BrandID = BrandId;
+                        }
+
+                        SQLiteCommand type_id_search_command = new SQLiteCommand(type_id_search, connection);
+                        type_id_search_command.Parameters.Add("@Name", DbType.String).Value = TypeDevice.Text;
+
+                        using (SQLiteDataReader TypeIdReader = type_id_search_command.ExecuteReader())
+                        {
+                            TypeIdReader.Read();
+                            int TypeId = TypeIdReader.GetInt32(0);
+                            TypeID = TypeId;
+                        }
+
+                        SQLiteCommand device_search_command = new SQLiteCommand(device_search, connection);
+                        device_search_command.Parameters.Add("@TypeID", DbType.Int32).Value = TypeID;
+                        device_search_command.Parameters.Add("@BrandID", DbType.Int32).Value = BrandID;
+                        device_search_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
+                        device_search_command.Parameters.Add("@Model", DbType.String).Value = ModelDevice.Text;
+
+                        SQLiteDataAdapter da = new SQLiteDataAdapter(device_search_command);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        if(dt.Rows.Count > 0)
+                        {
+                            attention_1.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            attention_1.Visibility = Visibility.Hidden;
+                            SQLiteCommand device_update_command = new SQLiteCommand(device_update, connection);
+                            device_update_command.Parameters.Add("@TypeID", DbType.Int32).Value = TypeID;
+                            device_update_command.Parameters.Add("@BrandID", DbType.Int32).Value = BrandID;
+                            device_update_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceID;
+                            device_update_command.Parameters.Add("@Model", DbType.String).Value = ModelDevice.Text;
+                            device_update_command.ExecuteNonQuery();
+
+                            string message = "Данные успешно изменены";
+                            string caption = "Сообщение";
+                            MessageBoxButton button = MessageBoxButton.OK;
+                            MessageBoxImage icon = MessageBoxImage.Information;
+                            MessageBox.Show(message, caption, button, icon);
+                            Close();
+                        }
+                    }
+                }
             }
         }
 
+        private void Save_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

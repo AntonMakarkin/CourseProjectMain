@@ -49,6 +49,16 @@
                 Margin="0,-180,0,0" RenderTransformOrigin="0.555,-1.387">
                 Введите все данные
             </Label>
+            <Label 
+                x:Name="attention_1"
+                HorizontalAlignment="Center"
+                Width="184"
+                Height="30"
+                Foreground="Red"
+                Visibility="Hidden"
+                Margin="0,-180,0,0" RenderTransformOrigin="0.555,-1.387">
+                Данный девайс уже существует
+            </Label>
             <Label
                 Width="49"
                 Height="30"

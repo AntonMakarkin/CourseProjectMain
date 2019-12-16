@@ -23,6 +23,7 @@ namespace CourseProject
     /// </summary>
     public partial class ShowAndEditMaster : Window
     {
+        Window1 ApplicationWindow = new Window1();
         public static string MasterFullName;
         public static string MasterPhoneNumber;
         public static int MasterID;
@@ -36,8 +37,13 @@ namespace CourseProject
             Close();
         }
 
+        //public event EventHandler ButtonClicked;
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            /*if (ButtonClicked != null)
+            {
+                ButtonClicked(this, EventArgs.Empty);
+            }*/
 
             string NameString = FullName.Text.Trim();
             int CountWords = 0;
@@ -99,45 +105,97 @@ namespace CourseProject
 
 
 
-
-            if (CountWords < 3)
+            if (FullName.Text == "" || PhoneNumber.Text == "")
             {
-                Attention.Visibility = Visibility.Visible;
+                Attention_2.Visibility = Visibility.Visible;
             }
             else
             {
-                Attention.Visibility = Visibility.Hidden;
-                string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string client_update = "UPDATE Masters SET Name = @MasterName, Phone = @MasterPhone WHERE id = @MasterID";
-
-                using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                if (CountWords < 3)
                 {
-                    connection.Open();
-                    SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
-                    client_update_command.Parameters.Add("@MasterName", DbType.String).Value = FullName.Text;
-                    client_update_command.Parameters.Add("@MasterPhone", DbType.String).Value = PhoneNumber.Text;
-                    client_update_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
-                    client_update_command.ExecuteNonQuery();
+                    Attention.Visibility = Visibility.Visible;
                 }
+                else
+                {
+                    Attention.Visibility = Visibility.Hidden;
+                    if (FullName.Text == MasterFullName && PhoneNumber.Text == MasterPhoneNumber)
+                    {
+                        Return.Visibility = Visibility.Collapsed;
+                        FullName.IsReadOnly = true;
+                        PhoneNumber.IsReadOnly = true;
+                        FullName.Text = MasterFullName;
+                        PhoneNumber.Text = MasterPhoneNumber;
+                        Edit.Visibility = Visibility.Visible;
+                        Delete.Visibility = Visibility.Visible;
+                        Return.Visibility = Visibility.Collapsed;
+                        Save.Visibility = Visibility.Collapsed;
+                        Attention.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        string dbcon = @"Data Source = AddOrder.db; Version=3;";
+                        string master_search = "SELECT id FROM Masters WHERE MasterName = @MasterName AND Phone = @MasterPhone AND id != @MasterID";
+                        string master_update = "UPDATE Masters SET MasterName = @MasterName, Phone = @MasterPhone WHERE id = @MasterID";
 
-                string message = "Данные успешно изменены";
-                string caption = "Сообщение";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Information;
-                MessageBox.Show(message, caption, button, icon);
-                Close();
+                        using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                        {
+                            connection.Open();
 
-                /*Edit.Visibility = Visibility.Visible;
-                Return.Visibility = Visibility.Collapsed;
-                Save.Visibility = Visibility.Collapsed;
-                Delete.Visibility = Visibility.Visible;*/
+                            SQLiteCommand master_search_command = new SQLiteCommand(master_search, connection);
+                            master_search_command.Parameters.Add("@MasterName", DbType.String).Value = FullName.Text;
+                            master_search_command.Parameters.Add("@MasterPhone", DbType.String).Value = PhoneNumber.Text;
+                            master_search_command.Parameters.Add("@MasterID", DbType.String).Value = MasterID;
+
+                            SQLiteDataAdapter da = new SQLiteDataAdapter(master_search_command);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            if (dt.Rows.Count > 0)
+                            {
+                                Attention_1.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                Attention_1.Visibility = Visibility.Hidden;
+                                SQLiteCommand master_update_command = new SQLiteCommand(master_update, connection);
+                                master_update_command.Parameters.Add("@MasterName", DbType.String).Value = FullName.Text;
+                                master_update_command.Parameters.Add("@MasterPhone", DbType.String).Value = PhoneNumber.Text;
+                                master_update_command.Parameters.Add("@MasterID", DbType.Int32).Value = MasterID;
+                                master_update_command.ExecuteNonQuery();
+
+                                string message = "Данные успешно изменены";
+                                string caption = "Сообщение";
+                                MessageBoxButton button = MessageBoxButton.OK;
+                                MessageBoxImage icon = MessageBoxImage.Information;
+                                MessageBox.Show(message, caption, button, icon);
+                                Close();
+                            }
+
+                        }
+
+                        /*string query = "SELECT Name,Phone,IDNumber FROM Masters";
+
+                        using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                        {
+                            connection.Open();
+                            SQLiteCommand select_command = new SQLiteCommand(query, connection);
+                            using (SQLiteDataReader reader = select_command.ExecuteReader())
+                            {
+                                DataTable dt = new DataTable();
+                                dt.Load(reader);
+                                ApplicationWindow.MasterDataGrid.ItemsSource = dt.DefaultView;
+                                ApplicationWindow.Show();
+                            }
+                        }*/
+                    }
+                }
             }
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
         {
             string dbcon = @"Data Source = AddOrder.db; Version=3;";
-            string select_id_master = "SELECT id FROM Masters WHERE Name = @Name AND Phone = @Phone";
+            string select_id_master = "SELECT id FROM Masters WHERE MasterName = @Name AND Phone = @Phone";
 
             using (SQLiteConnection connection = new SQLiteConnection(dbcon))
             {
@@ -175,6 +233,8 @@ namespace CourseProject
             Return.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Collapsed;
             Attention.Visibility = Visibility.Hidden;
+            Attention_1.Visibility = Visibility.Hidden;
+            Attention_2.Visibility = Visibility.Hidden;
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -186,7 +246,7 @@ namespace CourseProject
             {
                 Hide();
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string delete_client = "DELETE FROM Masters WHERE Name = @Name AND Phone = @Phone";
+                string delete_client = "DELETE FROM Masters WHERE MasterName = @Name AND Phone = @Phone";
                 
                 using (SQLiteConnection connection = new SQLiteConnection(dbcon))
                 {
@@ -204,6 +264,6 @@ namespace CourseProject
                 MessageBox.Show(message, caption, button, icon);
 
             }
-        }
+        }     
     }
 } 

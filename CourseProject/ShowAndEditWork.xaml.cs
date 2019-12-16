@@ -44,7 +44,7 @@ namespace CourseProject
             string dbcon = @"Data Source = AddOrder.db; Version=3;";
             string query = "SELECT Model FROM Devices;";
             string search_device_id = "SELECT id FROM Devices WHERE Model = @ModelName";
-            string search_workId = "SELECT id FROM Works WHERE Name = @WorkName AND DeviceID = @DeviceID";
+            string search_workId = "SELECT id FROM Works WHERE WorkName = @WorkName AND DeviceID = @DeviceID";
 
             using (SQLiteConnection connection = new SQLiteConnection(dbcon))
             {
@@ -95,6 +95,7 @@ namespace CourseProject
             Cost = Price.Text;
             WorkTextBox.IsReadOnly = false;
             ModelDevice.IsEnabled = true;
+            Price.IsReadOnly = false;
             Edit.Visibility = Visibility.Collapsed;
             Return.Visibility = Visibility.Visible;
             Delete.Visibility = Visibility.Collapsed;
@@ -139,49 +140,86 @@ namespace CourseProject
             else
             {
                 attention.Visibility = Visibility.Hidden;
-                string PriceNumber = Price.Text.Trim();
-                int PriceNumberInt = int.Parse(PriceNumber);
-
-                string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string search_device_id = "SELECT id FROM Devices WHERE Model = @ModelName";
-                string work_update = "UPDATE Works SET Name = @WorkName, Price = @WorkPrice, DeviceID = @DeviceID WHERE id = @WorkID";
-
-                using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                if(WorkTextBox.Text == WorkName && ModelDevice.Text == Model && Price.Text == Cost)
                 {
-                    connection.Open();
-                    SQLiteCommand search_device_id_command = new SQLiteCommand(search_device_id, connection);
-                    search_device_id_command.Parameters.Add("@ModelName", DbType.String).Value = ModelDevice.Text;
-
-                    using (SQLiteDataReader DeviceIdReader = search_device_id_command.ExecuteReader())
-                    {
-                        DeviceIdReader.Read();
-                        int DeviceIDForQuery = DeviceIdReader.GetInt32(0);
-                        DeviceIDdb = DeviceIDForQuery;
-                    }
-
-                    SQLiteCommand work_update_command = new SQLiteCommand(work_update, connection);
-                    work_update_command.Parameters.Add("@WorkName", DbType.String).Value = WorkTextBox.Text;
-                    work_update_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceIDdb;
-                    work_update_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
-                    work_update_command.Parameters.Add("@WorkPrice", DbType.Int32).Value = PriceNumberInt;
-                    work_update_command.ExecuteNonQuery();
+                    Return.Visibility = Visibility.Collapsed;
+                    WorkTextBox.IsReadOnly = true;
+                    ModelDevice.IsEnabled = false;
+                    Price.IsReadOnly = true;
+                    WorkTextBox.Text = WorkName;
+                    ModelDevice.Text = Model;
+                    Price.Text = Cost;
+                    Edit.Visibility = Visibility.Visible;
+                    Delete.Visibility = Visibility.Visible;
+                    Return.Visibility = Visibility.Collapsed;
+                    Save.Visibility = Visibility.Collapsed;
+                    attention.Visibility = Visibility.Hidden;
+                    attention_1.Visibility = Visibility.Hidden;
                 }
+                else
+                {
+                    string PriceNumber = Price.Text.Trim();
+                    int PriceNumberInt = int.Parse(PriceNumber);
 
-                string message = "Данные успешно изменены";
-                string caption = "Сообщение";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Information;
-                MessageBox.Show(message, caption, button, icon);
-                Close();
+                    string dbcon = @"Data Source = AddOrder.db; Version=3;";
+                    string search_device_id = "SELECT id FROM Devices WHERE Model = @ModelName";
+                    string work_search = "SELECT id FROM Works WHERE WorkName = @Name AND Price = @WorkPrice AND DeviceID = @DeviceID AND id != @WorkID";
+                    string work_update = "UPDATE Works SET WorkName = @WorkName, Price = @WorkPrice, DeviceID = @DeviceID WHERE id = @WorkID";
+
+                    using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                    {
+                        connection.Open();
+                        SQLiteCommand search_device_id_command = new SQLiteCommand(search_device_id, connection);
+                        search_device_id_command.Parameters.Add("@ModelName", DbType.String).Value = ModelDevice.Text;
+
+                        using (SQLiteDataReader DeviceIdReader = search_device_id_command.ExecuteReader())
+                        {
+                            DeviceIdReader.Read();
+                            int DeviceIDForQuery = DeviceIdReader.GetInt32(0);
+                            DeviceIDdb = DeviceIDForQuery;
+                        }
+
+                        SQLiteCommand work_search_command = new SQLiteCommand(work_search, connection);
+                        work_search_command.Parameters.Add("@Name", DbType.String).Value = WorkTextBox.Text;
+                        work_search_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceIDdb;
+                        work_search_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
+                        work_search_command.Parameters.Add("@WorkPrice", DbType.Int32).Value = PriceNumberInt;
+
+                        SQLiteDataAdapter da = new SQLiteDataAdapter(work_search_command);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            attention_1.Visibility = Visibility.Visible;
+                        }
+                        else
+                        {
+                            attention_1.Visibility = Visibility.Hidden;
+                            SQLiteCommand work_update_command = new SQLiteCommand(work_update, connection);
+                            work_update_command.Parameters.Add("@WorkName", DbType.String).Value = WorkTextBox.Text;
+                            work_update_command.Parameters.Add("@DeviceID", DbType.Int32).Value = DeviceIDdb;
+                            work_update_command.Parameters.Add("@WorkID", DbType.Int32).Value = WorkID;
+                            work_update_command.Parameters.Add("@WorkPrice", DbType.Int32).Value = PriceNumberInt;
+                            work_update_command.ExecuteNonQuery();
+
+                            string message = "Данные успешно изменены";
+                            string caption = "Сообщение";
+                            MessageBoxButton button = MessageBoxButton.OK;
+                            MessageBoxImage icon = MessageBoxImage.Information;
+                            MessageBox.Show(message, caption, button, icon);
+                            Close();
+                        }
+                    }
+                }
             }
-
         }
 
         private void Return_Click(object sender, RoutedEventArgs e)
         {
             Return.Visibility = Visibility.Collapsed;
             WorkTextBox.IsReadOnly = true;
-            ModelDevice.IsEditable = false;
+            ModelDevice.IsEnabled = false;
             Price.IsReadOnly = true;
             WorkTextBox.Text = WorkName;
             ModelDevice.Text = Model;
@@ -191,6 +229,7 @@ namespace CourseProject
             Return.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Collapsed;
             attention.Visibility = Visibility.Hidden;
+            attention_1.Visibility = Visibility.Hidden;
         }
 
     }

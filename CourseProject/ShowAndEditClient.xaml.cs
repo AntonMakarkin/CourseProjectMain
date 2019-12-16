@@ -98,50 +98,75 @@ namespace CourseProject
             }*/
 
             
-
-
-            if (CountWords < 3)
+            if(FullName.Text == "" || PhoneNumber.Text == "")
             {
-                Attention.Visibility = Visibility.Visible;
+                Attention_2.Visibility = Visibility.Visible;
             }
             else
             {
-                Attention.Visibility = Visibility.Hidden;
-                string dbcon = @"Data Source = AddOrder.db; Version=3;";
-                string client_update = "UPDATE Clients SET Name = @ClientName, Phone = @ClientPhone WHERE id = @ClientID";
-                //string client_update = "UPDATE Clients SET id = @ClientID WHERE Name = @ClientName AND Phone = @ClientPhone";
-                /*SQLiteConnection connection = new SQLiteConnection(dbcon);
-                connection.Open();
-
-                SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
-                client_update_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
-                client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
-                client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
-                client_update_command.ExecuteNonQuery();
-                connection.Close();*/
-
-                using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                if (CountWords < 3)
                 {
-                    connection.Open();
-                    SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
-                    client_update_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
-                    client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
-                    client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
-                    client_update_command.ExecuteNonQuery();
+                    Attention.Visibility = Visibility.Visible;
                 }
+                else
+                {
+                    Attention.Visibility = Visibility.Hidden;
+                    if (FullName.Text == ClientFullName && PhoneNumber.Text == ClientPhoneNumber)
+                    {
+                        Return.Visibility = Visibility.Collapsed;
+                        FullName.IsReadOnly = true;
+                        PhoneNumber.IsReadOnly = true;
+                        FullName.Text = ClientFullName;
+                        PhoneNumber.Text = ClientPhoneNumber;
+                        Edit.Visibility = Visibility.Visible;
+                        Delete.Visibility = Visibility.Visible;
+                        Return.Visibility = Visibility.Collapsed;
+                        Save.Visibility = Visibility.Collapsed;
+                        Attention.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        string dbcon = @"Data Source = AddOrder.db; Version=3;";
+                        string client_search = "SELECT id FROM Clients WHERE Name = @ClientName AND Phone = @ClientPhone AND id != @ClientID";
+                        string client_update = "UPDATE Clients SET Name = @ClientName, Phone = @ClientPhone WHERE id = @ClientID";
 
-                string message = "Данные успешно изменены";
-                string caption = "Сообщение";
-                MessageBoxButton button = MessageBoxButton.OK;
-                MessageBoxImage icon = MessageBoxImage.Information;
-                MessageBox.Show(message, caption, button, icon);
-                Close();
+                        using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+                        {
+                            connection.Open();
 
-                /*Edit.Visibility = Visibility.Visible;
-                Return.Visibility = Visibility.Collapsed;
-                Save.Visibility = Visibility.Collapsed;
-                Delete.Visibility = Visibility.Visible;*/
+                            SQLiteCommand client_search_command = new SQLiteCommand(client_search, connection);
+                            client_search_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
+                            client_search_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
+                            client_search_command.Parameters.Add("@MasterID", DbType.String).Value = ClientID;
+
+                            SQLiteDataAdapter da = new SQLiteDataAdapter(client_search_command);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+
+                            if(dt.Rows.Count > 0)
+                            {
+                                Attention_1.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                SQLiteCommand client_update_command = new SQLiteCommand(client_update, connection);
+                                client_update_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
+                                client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
+                                client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
+                                client_update_command.ExecuteNonQuery();
+
+                                string message = "Данные успешно изменены";
+                                string caption = "Сообщение";
+                                MessageBoxButton button = MessageBoxButton.OK;
+                                MessageBoxImage icon = MessageBoxImage.Information;
+                                MessageBox.Show(message, caption, button, icon);
+                                Close();
+                            }
+                        }
+                    }
+                }
             }
+
         }
 
         private void Edit_Click(object sender, RoutedEventArgs e)
@@ -162,13 +187,6 @@ namespace CourseProject
                     ClientID = ClientId;
                 }
             }
-
-
-            /*SQLiteDataReader ClientIdReader = select_id_client_command.ExecuteReader();
-            ClientIdReader.Read();
-            int ClientId = ClientIdReader.GetInt32(0);
-            ClientID = ClientId;
-            ClientIdReader.Close();*/
 
             ClientFullName = FullName.Text;
             ClientPhoneNumber = PhoneNumber.Text;
@@ -192,6 +210,8 @@ namespace CourseProject
             Return.Visibility = Visibility.Collapsed;
             Save.Visibility = Visibility.Collapsed;
             Attention.Visibility = Visibility.Hidden;
+            Attention_1.Visibility = Visibility.Hidden;
+            Attention_2.Visibility = Visibility.Hidden;
         }
 
         private void Delete_Click(object sender, RoutedEventArgs e)
@@ -203,15 +223,7 @@ namespace CourseProject
                 Hide();
                 string dbcon = @"Data Source = AddOrder.db; Version=3;";
                 string delete_client = "DELETE FROM Clients WHERE Name = @Name AND Phone = @Phone";
-                /*SQLiteConnection connection = new SQLiteConnection(dbcon);
-                connection.Open();
-
-                SQLiteCommand delete_client_command = new SQLiteCommand(delete_client, connection);
-                delete_client_command.Parameters.Add("@Name", DbType.String).Value = FullName.Text;
-                delete_client_command.Parameters.Add("@Phone", DbType.String).Value = PhoneNumber.Text;
-                delete_client_command.ExecuteNonQuery();
-                connection.Close();*/
-
+                
                 using (SQLiteConnection connection = new SQLiteConnection(dbcon))
                 {
                     connection.Open();

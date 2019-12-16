@@ -46,21 +46,6 @@
         <Grid Width="220" HorizontalAlignment="Left" Background="White"
               Panel.ZIndex="2">
             <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="#009FFD" Margin="0 100 0 0" >
-                <ListViewItem x:Name="AddOrder" MouseDoubleClick="AddOrder_MouseDoubleClick">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="PersonPlus"
-                                                     Width="25"
-                                                     Height="25"
-                                                     Margin="10"
-                                                     VerticalAlignment="Center"
-                                                     Foreground="Black"/>
-                        <TextBlock Text="Добавить заявку"
-                                       VerticalAlignment="Center"
-                                       Margin="10 10"
-                                       Foreground="Black"
-                                       FontSize="15"/>
-                    </StackPanel>
-                </ListViewItem>
                 <ListViewItem x:Name="Orders" 
                               MouseDoubleClick="Orders_MouseDoubleClick">
                     <StackPanel Orientation="Horizontal">
@@ -195,7 +180,10 @@
                 Background="Transparent"
                 Foreground="White"
                 CanUserSortColumns="False"
-                AutoGenerateColumns="False">
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                CanUserReorderColumns="False"
+                IsReadOnly="True">
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Foreground" Value="White" />
@@ -204,14 +192,24 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="286"
+                    <DataGridTextColumn Width="250"
+                                        Header="Клиент"
+                                        Binding="{Binding Path=Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="150"
                                         Header="Устройство"
-                                        Binding="{Binding Path=ClientId}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="286"
+                                        Binding="{Binding Path=Model}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="200"
                                         Header="Услуга"
-                                        Binding="{Binding Path=Date}"></DataGridTextColumn>
+                                        Binding="{Binding Path=WorkName}"></DataGridTextColumn>
                     <DataGridTextColumn Width="288"
-                                        Header="Цена"
+                                        Header="Мастер"
+                                        Binding="{Binding Path=MasterName}"
+                                        Visibility="Collapsed"></DataGridTextColumn>
+                    <DataGridTextColumn Width="140"
+                                        Header="Дата"
+                                        Binding="{Binding Path=Date}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="120"
+                                        Header="Статус"
                                         Binding="{Binding Path=Status}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
@@ -219,8 +217,9 @@
                   Margin="80,540,630,20">
                 <Button Width="150" Height="40"
                     Style="{StaticResource RoundButtonTemplate}"
-                    Content="Добавить девайс"
-                    Click="AddDeviceClick"
+                    Content="Добавить заявку"
+                    x:Name="AddNewOrder"
+                    Click="AddNewOrder_Click"
                     />
             </Grid>
         </Grid>
@@ -331,7 +330,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="286"
                                         Header="Имя мастера"
-                                        Binding="{Binding Path=Name}"></DataGridTextColumn>
+                                        Binding="{Binding Path=MasterName}"></DataGridTextColumn>
                     <DataGridTextColumn Width="286"
                                         Header="Телефон"
                                         Binding="{Binding Path=Phone}"></DataGridTextColumn>
@@ -375,7 +374,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="286"
                                         Header="Услуга"
-                                        Binding="{Binding Path=Name}"></DataGridTextColumn>
+                                        Binding="{Binding Path=WorkName}"></DataGridTextColumn>
                     <DataGridTextColumn Width="286"
                                         Header="Цена"
                                         Binding="{Binding Path=Price}"></DataGridTextColumn>

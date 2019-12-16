@@ -49,6 +49,26 @@
             Неккоректно введенное имя или телефон
         </Label>
         <Label
+            x:Name="Attention_1"
+            Height="30"
+            Width="320" 
+            Margin="0,42,0,198"
+            Foreground="Red"
+            Visibility="Hidden"
+            >
+            Мастер с данным именем и телефоном уже существует
+        </Label>
+        <Label
+            x:Name="Attention_2"
+            Height="30"
+            Width="120" 
+            Margin="0,42,0,198"
+            Foreground="Red"
+            Visibility="Hidden"
+            >
+            Введите все данные
+        </Label>
+        <Label
             Width="44"
             Height="30"
             Margin="51,73,305,147"
