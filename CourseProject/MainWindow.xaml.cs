@@ -67,6 +67,7 @@ namespace CourseProject
                 if(dt.Rows.Count > 0)
                 {
                     //System.Windows.Forms.MessageBox.Show("Вы вошли")
+                    conn.Close();
                     Hide();
                     Window1 window = new Window1();
                     window.Show();
@@ -75,6 +76,7 @@ namespace CourseProject
                 else
                 {
                     System.Windows.Forms.MessageBox.Show("Вы не вошли");
+                    conn.Close();
                 }
             }
         }

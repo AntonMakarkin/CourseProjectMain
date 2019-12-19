@@ -174,6 +174,7 @@
               Visibility="Collapsed">
             <DataGrid
                 x:Name="OrdersDataGrid"
+                MouseDoubleClick="OrdersDataGrid_MouseDoubleClick"
                 GridLinesVisibility="None"
                 Width="860" Height="440" HorizontalAlignment="Right"
                 VerticalAlignment="Center"
@@ -306,7 +307,7 @@
         </Grid>
         <Grid Width="860" HorizontalAlignment="Right"
               x:Name="Master"
-              Visibility="Hidden"
+              Visibility="Collapsed"
               >
             <DataGrid
                 x:Name="MasterDataGrid"
@@ -343,12 +344,6 @@
                     Content="Добавить мастера"
                     Margin="80,540,630,20"
                     Click="AddMasterClick"
-                    />
-            <Button Width="150" Height="40"
-                    Style="{StaticResource RoundButtonTemplate}"
-                    Content="Обновить"
-                    Margin="310,540,400,20"
-                    Click="RefreshClick"
                     />
         </Grid>
         <Grid Width="860" HorizontalAlignment="Right"

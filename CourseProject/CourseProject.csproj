@@ -147,9 +147,6 @@
     <Compile Include="DeleteClientModalWindow.xaml.cs">
       <DependentUpon>DeleteClientModalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RedactureClient.xaml.cs">
-      <DependentUpon>RedactureClient.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ShowAndEditClient.xaml.cs">
       <DependentUpon>ShowAndEditClient.xaml</DependentUpon>
     </Compile>
@@ -158,6 +155,9 @@
     </Compile>
     <Compile Include="ShowAndEditMaster.xaml.cs">
       <DependentUpon>ShowAndEditMaster.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShowAndEditOrder.xaml.cs">
+      <DependentUpon>ShowAndEditOrder.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShowAndEditWork.xaml.cs">
       <DependentUpon>ShowAndEditWork.xaml</DependentUpon>
@@ -209,10 +209,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RedactureClient.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ShowAndEditClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,6 +218,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShowAndEditMaster.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShowAndEditOrder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

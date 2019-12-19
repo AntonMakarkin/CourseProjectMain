@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace CourseProject
 {
     /// <summary>
-    /// Логика взаимодействия для RedactureClient.xaml
+    /// Логика взаимодействия для ShowAndEditOrder.xaml
     /// </summary>
-    public partial class RedactureClient : Window
+    public partial class ShowAndEditOrder : Window
     {
-        public RedactureClient()
+        public ShowAndEditOrder()
         {
             InitializeComponent();
         }

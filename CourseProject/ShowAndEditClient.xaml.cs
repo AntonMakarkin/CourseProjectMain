@@ -36,68 +36,33 @@ namespace CourseProject
             Close();
         }
 
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
 
             string NameString = FullName.Text.Trim();
             int CountWords = 0;
             int id = 0;
-            bool findSpace = false;//Ставим флаг поиска пробела в false - это позволит 
-                                   //избежать ошибок, если в начале строки будут пробелы
+            bool findSpace = false;
 
             while (id < NameString.Length)
             {
                 if (NameString[id] == ' ')
                 {
-                    //Проверяем - искали-ли мы его.
-                    //Если искали, то ставим флаг того, что нашли, 
-                    //если не искали (ищем уже не пробел) - просто идём дальше.
                     if (findSpace)
                         findSpace = false;
                 }
-                //Если нашли не пробел
                 else
                 {
-                    //Если искали пробел, то ничего не делаем, 
-                    //а просто идём дальше, в противном случае
-                    //Говорим, что мы нашлю символ который не пробел,
-                    //и увеличиваем счётчик
                     if (!findSpace)
                     {
-                        //Говорим, что теперь ищем снова пробел
                         findSpace = true;
-                        //Увеличиваем счётчик слов
                         CountWords++;
                     }
                 }
                 id++;
             }
 
-            /*string NumberString = PhoneNumber.Text;
-            int id_2 = 0;
-            bool CorrectNumber = false;
-            int NumberLength = NumberString.Length;
-
-            if (NumberLength != 11)
-            {
-                CorrectNumber = false;
-            }
-            else
-            {
-                while (id_2 < NumberLength)
-                {
-                    if (NumberString[id_2] == ' ')
-                    {
-                        CorrectNumber = false;
-                    }
-                    else
-                    {
-                        CorrectNumber = true;
-                    }
-                }
-            }*/
-
-            
             if(FullName.Text == "" || PhoneNumber.Text == "")
             {
                 Attention_2.Visibility = Visibility.Visible;
@@ -137,7 +102,7 @@ namespace CourseProject
                             SQLiteCommand client_search_command = new SQLiteCommand(client_search, connection);
                             client_search_command.Parameters.Add("@ClientName", DbType.String).Value = FullName.Text;
                             client_search_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
-                            client_search_command.Parameters.Add("@MasterID", DbType.String).Value = ClientID;
+                            client_search_command.Parameters.Add("@ClientID", DbType.String).Value = ClientID;
 
                             SQLiteDataAdapter da = new SQLiteDataAdapter(client_search_command);
                             DataTable dt = new DataTable();
@@ -154,12 +119,13 @@ namespace CourseProject
                                 client_update_command.Parameters.Add("@ClientPhone", DbType.String).Value = PhoneNumber.Text;
                                 client_update_command.Parameters.Add("@ClientID", DbType.Int32).Value = ClientID;
                                 client_update_command.ExecuteNonQuery();
-
                                 string message = "Данные успешно изменены";
                                 string caption = "Сообщение";
                                 MessageBoxButton button = MessageBoxButton.OK;
                                 MessageBoxImage icon = MessageBoxImage.Information;
                                 MessageBox.Show(message, caption, button, icon);
+                                Window1 window = this.Owner as Window1;
+                                window.DataRefreshClients();
                                 Close();
                             }
                         }
@@ -217,6 +183,7 @@ namespace CourseProject
         private void Delete_Click(object sender, RoutedEventArgs e)
         {
             DeleteClientModalWindow window = new DeleteClientModalWindow();
+            
 
             if(window.ShowDialog() == true)
             {
@@ -239,6 +206,10 @@ namespace CourseProject
                 MessageBoxImage icon = MessageBoxImage.Information;
                 MessageBox.Show(message, caption, button, icon);
 
+                Window1 window1 = this.Owner as Window1;
+                window1.DataRefreshClients();
+
+                Close();
             }
         }
 

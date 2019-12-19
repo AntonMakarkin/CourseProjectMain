@@ -1,0 +1,231 @@
+﻿<Window x:Class="CourseProject.ShowAndEditOrder"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CourseProject"
+        mc:Ignorable="d"
+        Title="ShowAndEditOrder" Height="450" Width="400"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Border>
+            <Border.Background>
+                <LinearGradientBrush>
+                    <GradientStop Color="#0acffe" Offset="0"/>
+                    <GradientStop Color="#495aff" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <Grid Height="60" VerticalAlignment="Top">
+            <TextBlock Text="Добавление заявки на ремонт"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="15"
+                       FontFamily="helvetica"
+                       FontWeight="Light"
+                       Foreground="White"
+                       />
+            <Button Click="ButtonCloseMain" Height="25" Width="25" Margin="340,0,0,0" VerticalAlignment="Center">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border x:Name="BdM" Background="Transparent">
+                            <Path x:Name="PtM" Data="M0,0 M0.2,0.2 L 0.8,0.8 M0.2,0.8 L0.8,0.2 M1,1"
+                                  Stretch="Uniform" Stroke="White" StrokeThickness="2"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+        <Grid Height="390" VerticalAlignment="Bottom" Margin="0 0 0 0">
+            <Label
+                Height="30"
+                Width="120"
+                Margin="140,-14,140,378"
+                Foreground="Red"
+                Visibility="Hidden">
+                Введите все данные
+            </Label>
+            <Label
+                Width="49"
+                Height="30"
+                Margin="-270 -320 0 0"
+                Foreground="White">
+                Клиент
+            </Label>
+            <ComboBox x:Name="ClientComboBox" 
+                            FontFamily="Helvetica"
+                            FontWeight="Light"
+                            HorizontalAlignment="Center"
+                            Foreground="Black"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Width="250"
+                            HorizontalContentAlignment="Left"
+                            Opacity="0.5"
+                            Height="25"
+                            Margin="106,0,44,320"
+                            IsEditable="True"
+                            IsEnabled="False"
+                            Cursor=""
+            />
+
+            <Border
+                Background="White"
+                Width="250"
+                Height="2"
+                Opacity="0.5"
+                 Margin="106,0,44,295"/>
+
+
+            <Label
+                Width="50"
+                Height="30"
+                Margin="40,70,316,290"
+                Foreground="White" RenderTransformOrigin="0.263,0.394">
+                Девайс
+            </Label>
+            <ComboBox
+                x:Name="DeviceModel"
+                FontFamily="Helvetica"
+                            FontWeight="Light"
+                            HorizontalAlignment="Center"
+                            Foreground="Black"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Width="250"
+                            HorizontalContentAlignment="Left"
+                            Opacity="0.5"
+                            Height="25"
+                            Margin="106,70,44,295"
+                            IsEnabled="False"
+                            Cursor=""
+                />
+            <Border
+                Background="White"
+                Width="250"
+                Height="2"
+                Opacity="0.5"
+                Margin="106,93,44,295"/>
+
+
+            <Label
+                Width="44"
+                Height="30"
+                Margin="40,120,316,240"
+                Foreground="White">
+                Тип
+            </Label>
+            <ComboBox
+                x:Name="TypeOfWork"
+                            FontWeight="Light"
+                            HorizontalAlignment="Center"
+                            Foreground="Black"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Width="250"
+                            HorizontalContentAlignment="Left"
+                            Opacity="0.5"
+                            Height="25"
+                            Margin="106,70,44,195" 
+                            Cursor=""
+                />
+            <Border
+                Background="White"
+                Width="250"
+                Height="2"
+                Opacity="0.5"
+                Margin="106,93,44,195"/>
+
+
+            <Label
+                Width="53"
+                Height="30"
+                Margin="40,170,307,190"
+                Foreground="White">
+                Мастер
+            </Label>
+            <ComboBox x:Name="MasterName"
+                            FontWeight="Light"
+                            HorizontalAlignment="Center"
+                            Foreground="Black"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Width="250"
+                            HorizontalContentAlignment="Left"
+                            Opacity="0.5"
+                            Height="25"
+                            Margin="106,70,44,95"
+                            IsEditable="False"
+                            />
+            <Border
+                Background="White"
+                Width="250"
+                Height="2"
+                Opacity="0.5"
+                 Margin="106,93,44,95"/>
+
+            <Label
+                Width="51"
+                Height="30"
+                Margin="40,218,309,142"
+                Foreground="White">
+                Дата
+            </Label>
+            <TextBox x:Name="Date"
+                      FontFamily="Helvetica"
+                            FontWeight="Light"
+                            HorizontalAlignment="Center"
+                            Foreground="Black"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Width="250"
+                            HorizontalContentAlignment="Left"
+                            Opacity="0.5"
+                            Height="25"
+                            Margin="106,70,44,0"
+                            />
+            <Border
+                Background="White"
+                Width="250"
+                Height="2"
+                Opacity="0.5"
+                 Margin="106,240,44,148"/>
+            <Label
+                Width="51"
+                Height="30"
+                Margin="40,265,308,95"
+                Foreground="White">
+                Услуга
+            </Label>
+            <TextBox x:Name="Status" FontFamily="Helvetica"
+                            FontWeight="Light"
+                            HorizontalAlignment="Center"
+                            Foreground="Black"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Width="250"
+                            HorizontalContentAlignment="Left"
+                            Opacity="0.5"
+                            Height="25"
+                            Margin="106,70,44,-95"
+                            />
+            <Border
+                Background="White"
+                Width="250"
+                Height="2"
+                Opacity="0.5"
+                 Margin="106,288,44,100"/>
+
+
+            <StackPanel Orientation="Horizontal" Margin="0,300,150,0" HorizontalAlignment="Center">
+                <Button Style="{StaticResource RoundButtonTemplate}" Width="100" Content="Сбросить" Margin="0,25,0,25"
+                        />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="150,300,0,0" HorizontalAlignment="Center">
+                <Button Style="{StaticResource RoundButtonTemplate}" Width="100" Content="Добавить" Margin="0,25,0,25"
+                        />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

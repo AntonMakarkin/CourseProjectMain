@@ -26,9 +26,56 @@ namespace CourseProject
             InitializeComponent();
         }
 
-        public void DataRefresh()
+        private void Window_Loaded(object sender, EventArgs e)
         {
-            MainDataGrid.Items.Refresh();
+            string dbcon = "Data Source = AddOrder.db; Version = 3";
+            string query_order = "SELECT Name, Model, WorkName, MasterName, Date, Status FROM Application a JOIN Clients c ON a.ClientId = c.id JOIN Devices d ON a.DeviceId = d.id JOIN Works w ON a.WorkId = w.id JOIN Masters m  ON a.MasterId = m.id";
+            string query_client = "SELECT Name,Phone FROM Clients";
+            string query_devices = "SELECT Types.Name, Brands.BrandName, Devices.Model From Brands INNER JOIN(Types INNER JOIN Devices ON Types.id = Devices.TypeId) ON Brands.id = Devices.BrandId";
+            string query_master = "SELECT MasterName,Phone,IDNumber FROM Masters";
+            string query_works = "SELECT Works.WorkName, Works.Price, Works.DeviceID, Devices.id, Devices.Model FROM Works, Devices WHERE DeviceID = Devices.id;";
+
+            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+            {
+                connection.Open();
+                SQLiteCommand select_command_order = new SQLiteCommand(query_order, connection);
+                SQLiteCommand select_command_order_ended = new SQLiteCommand(query_order, connection);
+                SQLiteCommand select_command_client = new SQLiteCommand(query_client, connection);
+                SQLiteCommand select_command_devices = new SQLiteCommand(query_devices, connection);
+                SQLiteCommand select_command_master = new SQLiteCommand(query_master, connection);
+                SQLiteCommand select_command_works = new SQLiteCommand(query_works, connection);
+                using (SQLiteDataReader reader = select_command_order.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    OrdersDataGrid.ItemsSource = dt.DefaultView;
+                    
+                }
+                using (SQLiteDataReader reader = select_command_client.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    ClientsDataGrid.ItemsSource = dt.DefaultView;
+                }
+                using (SQLiteDataReader reader = select_command_devices.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    DevicesDataGrid.ItemsSource = dt.DefaultView;
+                }
+                using (SQLiteDataReader reader = select_command_master.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    MasterDataGrid.ItemsSource = dt.DefaultView;
+                }
+                using (SQLiteDataReader reader = select_command_client.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    WorksDataGrid.ItemsSource = dt.DefaultView;
+                }
+            }
         }
 
         private void ButtonCloseMain(object sender, EventArgs e)
@@ -49,38 +96,6 @@ namespace CourseProject
             Clients.Visibility = Visibility.Visible;
             Work.Visibility = Visibility.Collapsed;
             ActualOrders.Visibility = Visibility.Collapsed;
-            string dbcon = "Data Source = AddOrder.db; Version = 3";
-            string query = "SELECT Name,Phone FROM Clients";
-
-            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
-            {
-                connection.Open();
-                SQLiteCommand select_command = new SQLiteCommand(query, connection);
-                using (SQLiteDataReader reader = select_command.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    ClientsDataGrid.ItemsSource = dt.DefaultView;
-                }
-            }
-        }
-
-        private void Window_Loaded(object sender, EventArgs e)
-        {
-            string dbcon = "Data Source = AddOrder.db; Version = 3";
-            string query = "SELECT Name,Phone FROM Clients";
-            
-            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
-            {
-                connection.Open();
-                SQLiteCommand select_command = new SQLiteCommand(query, connection);
-                using (SQLiteDataReader reader = select_command.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    MainDataGrid.ItemsSource = dt.DefaultView;
-                }
-            }
         }
 
         private void Masters_MouseDoubleClick(object sender, RoutedEventArgs e)
@@ -91,20 +106,6 @@ namespace CourseProject
             Master.Visibility = Visibility.Visible;
             Work.Visibility = Visibility.Collapsed;
             ActualOrders.Visibility = Visibility.Collapsed;
-            string dbcon = "Data Source = AddOrder.db; Version = 3";
-            string query = "SELECT MasterName,Phone,IDNumber FROM Masters";
-
-            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
-            {
-                connection.Open();
-                SQLiteCommand select_command = new SQLiteCommand(query, connection);
-                using (SQLiteDataReader reader = select_command.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    MasterDataGrid.ItemsSource = dt.DefaultView;
-                }
-            }
         }
 
         private void AddNewOrder_Click(object sender, RoutedEventArgs e)
@@ -145,20 +146,6 @@ namespace CourseProject
             Master.Visibility = Visibility.Collapsed;
             Devices.Visibility = Visibility.Collapsed;
             ActualOrders.Visibility = Visibility.Collapsed;
-            string dbcon = "Data Source = AddOrder.db; Version = 3";
-            string query = "SELECT Works.WorkName, Works.Price, Works.DeviceID, Devices.id, Devices.Model FROM Works, Devices WHERE DeviceID = Devices.id;";
-
-            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
-            {
-                connection.Open();
-                SQLiteCommand select_command = new SQLiteCommand(query, connection);
-                using (SQLiteDataReader reader = select_command.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    WorksDataGrid.ItemsSource = dt.DefaultView;
-                }
-            }
         }
 
         private void Devices_MouseDoubleClick(object sender, RoutedEventArgs e)
@@ -169,21 +156,6 @@ namespace CourseProject
             Devices.Visibility = Visibility.Visible;
             Work.Visibility = Visibility.Collapsed;
             ActualOrders.Visibility = Visibility.Collapsed;
-            string dbcon = "Data Source = AddOrder.db; Version = 3";
-            //string query = "SELECT Тип,Бренд,Модель FROM Devices";
-            string query = "SELECT Types.Name, Brands.BrandName, Devices.Model From Brands INNER JOIN(Types INNER JOIN Devices ON Types.id = Devices.TypeId) ON Brands.id = Devices.BrandId";
-
-            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
-            {
-                connection.Open();
-                SQLiteCommand select_command = new SQLiteCommand(query, connection);
-                using (SQLiteDataReader reader = select_command.ExecuteReader())
-                {
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    DevicesDataGrid.ItemsSource = dt.DefaultView;
-                }
-            }
         }
 
         private void Orders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -194,36 +166,6 @@ namespace CourseProject
             Clients.Visibility = Visibility.Collapsed;
             Work.Visibility = Visibility.Collapsed;
             ActualOrders.Visibility = Visibility.Visible;
-            string dbcon = "Data Source = AddOrder.db; Version = 3";
-            string query = "SELECT Name, Model, WorkName, MasterName, Date, Status FROM Application a JOIN Clients c ON a.ClientId = c.id JOIN Devices d ON a.DeviceId = d.id JOIN Works w ON a.WorkId = w.id JOIN Masters m  ON a.MasterId = m.id";
-            //string query = "SELECT * FROM Application A LEFT JOIN Clients C ON A.Client = C.id";
-            //string query = "SELECT Application.ClientId, Clients.id, Clients.Name FROM Application, Clients WHERE Application.ClientId = Clients.id";
-            //string query = "SELECT Clients.id, Clients.Name, Devices.id, Devices.Model, Works.id, Works.Name, Masters.id, Masters.Name, Application.ClientId, Application.DeviceId, Application.WorkId, Application.MasterId, Application.Date, Application.Status FROM Clients, Devices, Works, Masters, Application WHERE ClientId = Clients.id, DeviceId = Devices.id, WorkId = Works.id, MasterId = Masters.id";
-            SQLiteConnection connection = new SQLiteConnection(dbcon);
-            connection.Open();
-            SQLiteCommand select_command = new SQLiteCommand(query, connection);
-            SQLiteDataReader reader = select_command.ExecuteReader();
-            DataTable dt = new DataTable(); //Создаем новый DataTable
-            dt.Load(reader); //Загружаем DataReader в DataTable
-            OrdersDataGrid.ItemsSource = dt.DefaultView;
-            reader.Close();
-            connection.Close();
-        }
-
-        private void RefreshClick(object sender, RoutedEventArgs e)
-        {
-            //MasterDataGrid.Items.Refresh();
-            /*string dbcon_1 = "Data Source = AddOrder.db; Version=3;";
-            string query_search_1 = "SELECT Name,Phone,IDNumber FROM Masters";
-            SQLiteConnection connection_1 = new SQLiteConnection(dbcon_1);
-            connection_1.Open();
-            SQLiteCommand command_search_1 = new SQLiteCommand(query_search_1, connection_1);
-            SQLiteDataReader reader = command_search_1.ExecuteReader();
-            DataTable DT = new DataTable();
-            DT.Load(reader);
-            MasterDataGrid.ItemsSource = DT.DefaultView;
-            reader.Close();
-            connection_1.Close();*/
         }
 
         private void ClientsDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -237,6 +179,7 @@ namespace CourseProject
                 string ClientName = rowView[0].ToString();
                 string ClientPhone = rowView[1].ToString();
                 Window_Loaded window = new Window_Loaded();
+                window.Owner = this;
                 window.FullName.Text = ClientName;
                 window.PhoneNumber.Text = ClientPhone;
                 window.ShowDialog();
@@ -254,6 +197,7 @@ namespace CourseProject
                 string MasterName = rowView[0].ToString();
                 string MasterPhone = rowView[1].ToString();
                 ShowAndEditMaster window = new ShowAndEditMaster();
+                window.Owner = this;
                 window.FullName.Text = MasterName;
                 window.PhoneNumber.Text = MasterPhone;
                 window.ShowDialog();
@@ -321,7 +265,69 @@ namespace CourseProject
             }
         }
 
-        private void MasterRefresh(object sender, EventArgs e)
+        private void OrdersDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGrid grid = sender as DataGrid;
+            if (grid != null && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+            {
+                DataGridRow dataGridRow = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
+                DataRowView rowView = (DataRowView)dataGridRow.Item;
+
+                string ClientName = rowView[0].ToString();
+                string ModelName = rowView[1].ToString();
+                string WorkName = rowView[2].ToString();
+                string MasterName = rowView[3].ToString();
+                string Date = rowView[4].ToString();
+                string Status = rowView[5].ToString();
+                ShowAndEditOrder window = new ShowAndEditOrder();
+
+                window.ClientComboBox.Text = ClientName;
+                window.DeviceModel.Text = ModelName;
+                window.TypeOfWork.Text = WorkName;
+                window.MasterName.Text = MasterName;
+                window.Date.Text = Date;
+                window.Status.Text = Status;
+                window.ShowDialog();
+            }
+        }
+
+        public void DataRefreshClients()
+        {
+            string dbcon = "Data Source = AddOrder.db; Version = 3";
+            string query = "SELECT Name,Phone FROM Clients";
+
+            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+            {
+                connection.Open();
+                SQLiteCommand select_command = new SQLiteCommand(query, connection);
+                using (SQLiteDataReader reader = select_command.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    ClientsDataGrid.ItemsSource = dt.DefaultView;
+                }
+            }
+        }
+
+        private void DevicesRefresh()
+        {
+            string dbcon = "Data Source = AddOrder.db; Version = 3";
+            string query_master = "SELECT MasterName,Phone,IDNumber FROM Masters";
+
+            using (SQLiteConnection connection = new SQLiteConnection(dbcon))
+            {
+                connection.Open();
+                SQLiteCommand select_command = new SQLiteCommand(query_master, connection);
+                using (SQLiteDataReader reader = select_command.ExecuteReader())
+                {
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    DevicesDataGrid.ItemsSource = dt.DefaultView;
+                }
+            }
+        }
+
+        private void MasterRefresh()
         {
             string dbcon = "Data Source = AddOrder.db; Version = 3";
             string query = "SELECT Name,Phone,IDNumber FROM Masters";
@@ -338,6 +344,5 @@ namespace CourseProject
                 }
             }
         }
-
     }
 }

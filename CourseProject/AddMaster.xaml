@@ -111,6 +111,7 @@
                   HorizontalAlignment="Center"
                   >
                 <Button Height="40"
+                    Style="{StaticResource RoundButtonTemplate}"
                     Content="Добавить"
                     Click="AddMasterClick"
                     />
